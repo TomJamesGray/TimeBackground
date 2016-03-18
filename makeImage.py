@@ -14,8 +14,8 @@ def makeImage(width,height):
         raise Exception("Invalid config file, not pairs of values provided in timeSection")
     #Get dims of startBox get rand num inside those vals
     startBox = []
-    startBox.append(width*(1-int(getArgsBy(offsets,',')[0])/100))
-    startBox.append(height*(1-int(getArgsBy(offsets,',')[1])/100))
+    startBox.append(int(width*(1-int(getArgsBy(offsets,',')[0])/100)))
+    startBox.append(int(height*(1-int(getArgsBy(offsets,',')[1])/100)))
     
     strandNum=3
     startPoints = []
