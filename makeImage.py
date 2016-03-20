@@ -19,10 +19,18 @@ def makeImage(width,height):
     strandNum=3
     startPoints = []
     for i in range(0,strandNum):
-        cords = []
-        cords.append(random.randint(0,startBox[0]))
-        cords.append(random.randint(0,startBox[1]))
+        cords =() 
+        cords = cords + (random.randint(0,startBox[0]),)
+        cords = cords + (random.randint(0,startBox[1]),)
         startPoints.append(cords)
+
+    #Make a blank image
+    img = Image.new('RGBA',(width,height),(255,255,255,0))
+    draw = ImageDraw.Draw(img)
+    draw.line(startPoints,'#F00',5) 
+    
+    del draw
+    img.save("testImg.png","PNG")
 
     print(startPoints)
     print(startBox)
