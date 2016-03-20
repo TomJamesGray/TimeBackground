@@ -51,6 +51,14 @@ def makeImage(width,height):
                 newCords = (startPoints[i][0]-branchDist,startPoints[i][1])
                 draw.line([startPoints[i],newCords],color,thickness)
                 startPoints[i] = newCords
+            #Check if coordinates have gone off the image and if so start a new strand and
+            #abandon the strand which is off the page
+            if (startPoints[i][0] > width or startPoints[i][0] < 0 or
+                startPoints[i][1] > width or startPoints[i][1] < 0):
+                    cords = ()
+                    cords = cords + (random.randint(0,startBox[0])+int((width-startBox[0])/2),)
+                    cords = cords + (random.randint(0,startBox[1])+int((height-startBox[1])/2),)
+                    startPoints[i] = cords
     del draw
     img.save("img.png","PNG")
 
