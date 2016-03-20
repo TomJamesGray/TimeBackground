@@ -4,7 +4,7 @@ from helpers.helpers import getArgsBy
 from time import strftime
 import random
 import re
-def makeImage(width,height):
+def makeImage(width,height,theme):
     #Get config parts for startBox
     offsets = getConfigPart("main","offsetBoundingBox")
     #Work out  where current time falls in the sections
@@ -25,12 +25,12 @@ def makeImage(width,height):
         startPoints.append(cords)
 
     #Make a blank image
-    img = Image.new('RGBA',(width,height),color=(255,255,255,255))
+    img = Image.new('RGBA',(width,height),color='#' + getConfigPart(theme,"bg"))
     draw = ImageDraw.Draw(img)
-    branchDist = int(getConfigPart("lines","branchDist"))
-    thickness = int(getConfigPart("lines","thickness"))
-    branches = int(getConfigPart("lines","branches"))
-    colors = getArgsBy(getConfigPart("lines","colors"),',')
+    branchDist = int(getConfigPart(theme,"branchDist"))
+    thickness = int(getConfigPart(theme,"thickness"))
+    branches = int(getConfigPart(theme,"branches"))
+    colors = getArgsBy(getConfigPart(theme,"colors"),',')
     colsDone = 1
     for i in range(0,strandNum):
         for j in range(0,branches):
