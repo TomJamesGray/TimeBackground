@@ -25,9 +25,9 @@ def makeImage(width,height):
         startPoints.append(cords)
 
     #Make a blank image
-    img = Image.new('RGBA',(width,height),(255,255,255,1))
+    img = Image.new('RGBA',(width,height),color=(255,255,255,255))
     draw = ImageDraw.Draw(img)
-    draw.line(startPoints,'#F00',5) 
+    draw.line(startPoints,'#F00',1) 
     
     del draw
     img.save("img.png","PNG")
