@@ -30,9 +30,16 @@ def makeImage(width,height):
     branchDist = int(getConfigPart("lines","branchDist"))
     thickness = int(getConfigPart("lines","thickness"))
     branches = int(getConfigPart("lines","branches"))
-    color = '#' + getConfigPart("lines","color")
+    colors = getArgsBy(getConfigPart("lines","colors"),',')
+    colsDone = 1
     for i in range(0,strandNum):
         for j in range(0,branches):
+            if colsDone*branches/len(colors) < j:
+                color = '#' + colors[colsDone]
+                print("Switching to color {} at branch no {}".format(colsDone,j))
+                colsDone += 1
+            else:
+                color = '#' + colors[colsDone-1]
             direction = random.randint(0,3)
             #0=up, 1 left, 2=down, 3=right
             if direction == 0:
