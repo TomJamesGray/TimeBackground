@@ -4,7 +4,16 @@ from helpers.helpers import getArgsBy
 from time import strftime
 import random
 import re
-def makeImage(width,height,theme):
+def makeImage(width,height,theme,superSampling):
+    #If superSampling is true then double the width and height
+    if superSampling:
+        width  *= 2
+        height *= 2
+        branchDist = int(getConfigPart(theme,"branchDist"))*2
+        thickness = int(getConfigPart(theme,"thickness"))*2
+    else:
+        branchDist = int(getConfigPart(theme,"branchDist"))
+        thickness = int(getConfigPart(theme,"thickness"))
     #Get config parts for startBox
     offsets = getConfigPart("main","offsetBoundingBox")
     #Work out  where current time falls in the sections
@@ -16,7 +25,7 @@ def makeImage(width,height,theme):
     startBox.append(int(width*(1-int(getArgsBy(offsets,',')[0])/100)))
     startBox.append(int(height*(1-int(getArgsBy(offsets,',')[1])/100)))
     
-    strandNum = 1
+    strandNum = int(getConfigPart(theme,"strands"))
     startPoints = []
     for i in range(0,strandNum):
         cords =() 
@@ -27,8 +36,6 @@ def makeImage(width,height,theme):
     #Make a blank image
     img = Image.new('RGBA',(width,height),color='#' + getConfigPart(theme,"bg"))
     draw = ImageDraw.Draw(img)
-    branchDist = int(getConfigPart(theme,"branchDist"))
-    thickness = int(getConfigPart(theme,"thickness"))
     branches = int(getConfigPart(theme,"branches"))
     colors = getArgsBy(getConfigPart(theme,"colors"),',')
     maxBranchDist = int(getConfigPart(theme,"maxBranchTurns"))
@@ -76,6 +83,8 @@ def makeImage(width,height,theme):
                     startPoints[i] = cords
                     branchResetAt = j
     del draw
+    if superSampling:
+        img = img.resize((int(width/2),int(height/2)),Image.NEAREST)
     img.save("img.png","PNG")
 
     print(startPoints)
