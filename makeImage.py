@@ -16,7 +16,7 @@ def makeImage(width,height):
     startBox.append(int(width*(1-int(getArgsBy(offsets,',')[0])/100)))
     startBox.append(int(height*(1-int(getArgsBy(offsets,',')[1])/100)))
     
-    strandNum=3
+    strandNum = 3
     startPoints = []
     for i in range(0,strandNum):
         cords =() 
@@ -27,8 +27,30 @@ def makeImage(width,height):
     #Make a blank image
     img = Image.new('RGBA',(width,height),color=(255,255,255,255))
     draw = ImageDraw.Draw(img)
-    draw.line(startPoints,'#F00',1) 
-    
+#    draw.line(startPoints,'#F00',1)
+    branchDist = 10
+    thickness = 3
+    branches = 10000
+    for i in range(0,strandNum):
+        for j in range(0,branches):
+            direction = random.randint(0,3)
+            #0=up, 1 left, 2=down, 3=right
+            if direction == 0:
+                newCords = (startPoints[i][0],startPoints[i][1]+branchDist)
+                draw.line([startPoints[i],newCords],'#F00',thickness)
+                startPoints[i] = newCords
+            elif direction == 1:
+                newCords = (startPoints[i][0]+branchDist,startPoints[i][1])
+                draw.line([startPoints[i],newCords],'#F00',thickness)
+                startPoints[i] = newCords
+            elif direction == 2:
+                newCords = (startPoints[i][0],startPoints[i][1]-branchDist)
+                draw.line([startPoints[i],newCords],'#F00', thickness)
+                startPoints[i] = newCords
+            elif direction == 3:
+                newCords = (startPoints[i][0]-branchDist,startPoints[i][1])
+                draw.line([startPoints[i],newCords],'#F00',thickness)
+                startPoints[i] = newCords
     del draw
     img.save("img.png","PNG")
 
