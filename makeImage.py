@@ -28,9 +28,9 @@ def makeImage(width,height):
     img = Image.new('RGBA',(width,height),color=(255,255,255,255))
     draw = ImageDraw.Draw(img)
 #    draw.line(startPoints,'#F00',1)
-    branchDist = 10
-    thickness = 3
-    branches = 10000
+    branchDist = int(getConfigPart("lines","branchDist"))
+    thickness = int(getConfigPart("lines","thickness"))
+    branches = int(getConfigPart("lines","branches"))
     for i in range(0,strandNum):
         for j in range(0,branches):
             direction = random.randint(0,3)
