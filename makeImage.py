@@ -16,7 +16,7 @@ def makeImage(width,height,theme):
     startBox.append(int(width*(1-int(getArgsBy(offsets,',')[0])/100)))
     startBox.append(int(height*(1-int(getArgsBy(offsets,',')[1])/100)))
     
-    strandNum = 3
+    strandNum = 1
     startPoints = []
     for i in range(0,strandNum):
         cords =() 
@@ -31,8 +31,10 @@ def makeImage(width,height,theme):
     thickness = int(getConfigPart(theme,"thickness"))
     branches = int(getConfigPart(theme,"branches"))
     colors = getArgsBy(getConfigPart(theme,"colors"),',')
+    maxBranchDist = int(getConfigPart(theme,"maxBranchTurns"))
     colsDone = 1
     for i in range(0,strandNum):
+        branchResetAt = 0 
         for j in range(0,branches):
             if colsDone*branches/len(colors) < j:
                 color = '#' + colors[colsDone]
@@ -58,6 +60,12 @@ def makeImage(width,height,theme):
                 newCords = (startPoints[i][0]-branchDist,startPoints[i][1])
                 draw.line([startPoints[i],newCords],color,thickness)
                 startPoints[i] = newCords
+            if j-branchResetAt ==  maxBranchDist:
+                cords = ()
+                cords = cords + (random.randint(0,startBox[0])+int((width-startBox[0])/2),)
+                cords = cords + (random.randint(0,startBox[1])+int((height-startBox[1])/2),)
+                startPoints[i] = cords
+                branchResetAt = j
             #Check if coordinates have gone off the image and if so start a new strand and
             #abandon the strand which is off the page
             if (startPoints[i][0] > width or startPoints[i][0] < 0 or
@@ -66,6 +74,7 @@ def makeImage(width,height,theme):
                     cords = cords + (random.randint(0,startBox[0])+int((width-startBox[0])/2),)
                     cords = cords + (random.randint(0,startBox[1])+int((height-startBox[1])/2),)
                     startPoints[i] = cords
+                    branchResetAt = j
     del draw
     img.save("img.png","PNG")
 
