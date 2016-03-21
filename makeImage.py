@@ -28,10 +28,7 @@ def makeImage(width,height,theme,superSampling):
     strandNum = int(getConfigPart(theme,"strands"))
     startPoints = []
     for i in range(0,strandNum):
-        cords =() 
-        cords = cords + (random.randint(0,startBox[0])+int((width-startBox[0])/2),)
-        cords = cords + (random.randint(0,startBox[1])+int((height-startBox[1])/2),)
-        startPoints.append(cords)
+        startPoints.append(makeCords(width,height,startBox))
 
     #Make a blank image
     img = Image.new('RGBA',(width,height),color='#' + getConfigPart(theme,"bg"))
@@ -68,19 +65,13 @@ def makeImage(width,height,theme,superSampling):
                 draw.line([startPoints[i],newCords],color,thickness)
                 startPoints[i] = newCords
             if j-branchResetAt ==  maxBranchDist:
-                cords = ()
-                cords = cords + (random.randint(0,startBox[0])+int((width-startBox[0])/2),)
-                cords = cords + (random.randint(0,startBox[1])+int((height-startBox[1])/2),)
-                startPoints[i] = cords
+                startPoints[i] = makeCords(width,height,startBox)
                 branchResetAt = j
             #Check if coordinates have gone off the image and if so start a new strand and
             #abandon the strand which is off the page
             if (startPoints[i][0] > width or startPoints[i][0] < 0 or
                 startPoints[i][1] > width or startPoints[i][1] < 0):
-                    cords = ()
-                    cords = cords + (random.randint(0,startBox[0])+int((width-startBox[0])/2),)
-                    cords = cords + (random.randint(0,startBox[1])+int((height-startBox[1])/2),)
-                    startPoints[i] = cords
+                    startPoints[i] = makeCords(width,height,startBox)
                     branchResetAt = j
     del draw
     if superSampling:
@@ -91,4 +82,9 @@ def makeImage(width,height,theme,superSampling):
     print(startBox)
     print(sections)
 
-
+#Generate coordinates within a box, and return them in a tuple
+def makeCords(width,height,startBox):
+    cords =() 
+    cords = cords + (random.randint(0,startBox[0])+int((width-startBox[0])/2),)
+    cords = cords + (random.randint(0,startBox[1])+int((height-startBox[1])/2),)
+    return cords
