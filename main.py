@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import sys
-from makeImageOOP import MainImage
+from makeImage import MainImage
 def main(args):
     print(args)
     parser = argparse.ArgumentParser(description='timeBackground')
