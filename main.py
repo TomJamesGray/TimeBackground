@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import sys
-from makeImage import makeImage
+from makeImageOOP import MainImage
 def main(args):
     print(args)
     parser = argparse.ArgumentParser(description='timeBackground')
@@ -21,7 +21,9 @@ def main(args):
         print('Invalid height or width')
         return 1
     else:
-        makeImage(width,height,theme,superSampling)
+        #makeImage(width,height,theme,superSampling)
+        img = MainImage(width,height,theme,superSampling)
+        img.drawImage()
     return 0
 if __name__ == '__main__':
     main(sys.argv[1:])
