@@ -3,7 +3,6 @@ import argparse
 import sys
 from makeImage import MainImage
 def main(args):
-    print(args)
     parser = argparse.ArgumentParser(description='timeBackground')
     #Define arguments
     parser.add_argument('width',action='store', type=int)

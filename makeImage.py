@@ -108,7 +108,5 @@ class MainImage(object):
         cords = ()
         cords = cords + (random.randint(0,self.startBox[0])+int((self.width-self.startBox[0])/2),)
         cords = cords + (random.randint(0,self.startBox[1])+int((self.height-self.startBox[1])/2),)
-        print(cords)
-        
         return cords
 
