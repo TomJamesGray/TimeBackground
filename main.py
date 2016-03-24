@@ -2,6 +2,7 @@
 import argparse
 import sys
 from makeImage import MainImage
+from helpers.getConfig import getConfigPart
 def main(args):
     parser = argparse.ArgumentParser(description='timeBackground')
     #Define arguments
@@ -19,10 +20,13 @@ def main(args):
     if width <= 0 or height <= 0:
         print('Invalid height or width')
         return 1
-    else:
-        #makeImage(width,height,theme,superSampling)
+    imageMode = getImageMode(theme)
+    if imageMode == "default":
         img = MainImage(width,height,theme,superSampling)
-        img.drawImage()
+    img.drawImage()
+    
     return 0
+def getImageMode(theme):
+    return getConfigPart(theme,"mode")
 if __name__ == '__main__':
     main(sys.argv[1:])
