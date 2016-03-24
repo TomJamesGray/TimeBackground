@@ -87,13 +87,13 @@ class MainImage(object):
                 if j-self.branchResetAt ==  self.maxBranchTurns:
                     self.startPoints[i] = self.makeCords()
                     self.branchResetAt = j
-            #Check if coordinates have gone off the image and if so start a new strand and
-            #abandon the strand which is off the page
-            if (self.startPoints[i][0] > self.width or self.startPoints[i][0] < 0 or
-                self.startPoints[i][1] > self.height or self.startPoints[i][1] < 0):
-                    self.startPoints[i] = self.makeCords() 
-                    self.branchResetAt = j
-                    print("New cords")
+                #Check if coordinates have gone off the image and if so start a new strand and
+                #abandon the strand which is off the page
+                if (self.startPoints[i][0] > self.width or self.startPoints[i][0] < 0 or
+                    self.startPoints[i][1] > self.height or self.startPoints[i][1] < 0):
+                        self.startPoints[i] = self.makeCords() 
+                        self.branchResetAt = j
+                        print("New cords")
 
         del self.draw
         if self.superSampling:
@@ -103,7 +103,7 @@ class MainImage(object):
         print(self.startPoints)
         #print(startBox)
         #print(sections)
-       
+
     def makeCords(self):
         cords = ()
         cords = cords + (random.randint(0,self.startBox[0])+int((self.width-self.startBox[0])/2),)
