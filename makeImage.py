@@ -93,14 +93,12 @@ class MainImage(object):
                     self.startPoints[i][1] > self.height or self.startPoints[i][1] < 0):
                         self.startPoints[i] = self.makeCords() 
                         self.branchResetAt = j
-                        print("New cords")
 
         del self.draw
         if self.superSampling:
             self.img = img.resize((int(self.width/2),int(self.height/2)),Image.NEAREST)
         self.img.save("img.png","PNG")
 
-        print(self.startPoints)
         #print(startBox)
         #print(sections)
 
