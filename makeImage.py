@@ -107,4 +107,27 @@ class MainImage(object):
         cords = cords + (random.randint(0,self.startBox[0])+int((self.width-self.startBox[0])/2),)
         cords = cords + (random.randint(0,self.startBox[1])+int((self.height-self.startBox[1])/2),)
         return cords
+class TrianglesImage(MainImage):
+    def retrieveThemeConfig(self):
+        self.colors = getArgsBy(getConfigPart(self.theme,"colors"),',')
+        self.bg = '#' + getConfigPart(self.theme,"bg")
+        self.sideSizes = getArgsBy(getConfigPart(self.theme,"sideSizes"),',')
+        self.joined = bool(getConfigPart(self.theme,"joined"))
+        self.triangles = int(getConfigPart(self.theme,"triangles"))
+    def drawImage(self):
+        self.retrieveThemeConfig()
+        #Check that the triangle provided in the config is possible to draw
+        #according to the triangle inequality theorem
+        print(self.sideSizes)
+        if len(self.sideSizes) == 3:
+            print("Hello")
+            print((self.sideSizes[0] + self.sideSizes[1] > self.sideSizes[2] and 
+                    self.sideSizes[0] + self.sideSizes[2] > self.sideSizes[1] and
+                    self.sideSizes[1] + self.sideSizes[2] > self.sideSizes[0]))
+                       # raise ValueError("Triangle sizes in config is impossible to draw")
+        for i in range(0,self.triangles):
+            #Get a coordinate, then get two more points from that are equal
+            #to the appropriate entry in sideSizes
+            cords = []
+            cords.append(self.makeCords())
 

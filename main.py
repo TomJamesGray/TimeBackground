@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import sys
-from makeImage import MainImage
+from makeImage import *
 from helpers.getConfig import getConfigPart
 def main(args):
     parser = argparse.ArgumentParser(description='timeBackground')
@@ -23,6 +23,8 @@ def main(args):
     imageMode = getImageMode(theme)
     if imageMode == "default":
         img = MainImage(width,height,theme,superSampling)
+    elif imageMode == "triangles":
+        img = TrianglesImage(width,height,theme,superSampling)
     img.drawImage()
     
     return 0
