@@ -112,6 +112,9 @@ class TrianglesImage(MainImage):
         self.colors = getArgsBy(getConfigPart(self.theme,"colors"),',')
         self.bg = '#' + getConfigPart(self.theme,"bg")
         self.sideSizes = getArgsBy(getConfigPart(self.theme,"sideSizes"),',')
+        #Convert the strings for the side sizes to ints
+        for i in range(0,len(self.sideSizes)):
+            self.sideSizes[i] = int(self.sideSizes[i])
         self.joined = bool(getConfigPart(self.theme,"joined"))
         self.triangles = int(getConfigPart(self.theme,"triangles"))
     def drawImage(self):
@@ -120,11 +123,12 @@ class TrianglesImage(MainImage):
         #according to the triangle inequality theorem
         print(self.sideSizes)
         if len(self.sideSizes) == 3:
-            print("Hello")
-            print((self.sideSizes[0] + self.sideSizes[1] > self.sideSizes[2] and 
+            if not (self.sideSizes[0] + self.sideSizes[1] > self.sideSizes[2] and 
                     self.sideSizes[0] + self.sideSizes[2] > self.sideSizes[1] and
-                    self.sideSizes[1] + self.sideSizes[2] > self.sideSizes[0]))
-                       # raise ValueError("Triangle sizes in config is impossible to draw")
+                    self.sideSizes[1] + self.sideSizes[2] > self.sideSizes[0]):
+                raise ValueError("Triangle from sizes in config file is impossible to draw")
+        else:
+            raise ValueError("Insufficient/Too many triangles sizes provided in config file")
         for i in range(0,self.triangles):
             #Get a coordinate, then get two more points from that are equal
             #to the appropriate entry in sideSizes
