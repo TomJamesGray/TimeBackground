@@ -129,9 +129,9 @@ class TrianglesImage(MainImage):
                 raise ValueError("Triangle from sizes in config file is impossible to draw")
         else:
             raise ValueError("Insufficient/Too many triangles sizes provided in config file")
+        self.cords = []
         for i in range(0,self.triangles):
-            #Get a coordinate, then get two more points from that are equal
-            #to the appropriate entry in sideSizes
-            cords = []
-            cords.append(self.makeCords())
-
+            #Get a coordinate for each triangle, then get two more points from 
+            #that are equal to the appropriate entry in sideSizes
+            self.cords.append(self.makeCords())
+        print(self.cords)
