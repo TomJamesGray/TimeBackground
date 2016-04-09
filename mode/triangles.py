@@ -1,6 +1,9 @@
 #Import the DefaultImage class to allow the triangles class
 #To inherit from it
 from mode.default import DefaultImage
+from PIL import Image,ImageDraw
+from helpers.helpers import getArgsBy
+from helpers.getConfig import getConfigPart
 class TrianglesImage(DefaultImage):
     def retrieveThemeConfig(self):
         self.colors = getArgsBy(getConfigPart(self.theme,"colors"),',')
