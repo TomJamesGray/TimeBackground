@@ -4,6 +4,7 @@ from mode.default import DefaultImage
 from PIL import Image,ImageDraw
 from helpers.helpers import getArgsBy
 from helpers.getConfig import getConfigPart
+import math
 class TrianglesImage(DefaultImage):
     def retrieveThemeConfig(self):
         self.colors = getArgsBy(getConfigPart(self.theme,"colors"),',')
@@ -27,6 +28,12 @@ class TrianglesImage(DefaultImage):
         else:
             raise ValueError("Insufficient/Too many triangles sizes provided in config file")
         self.cords = []
+        #Get first angle required for the triangle with the cosine rule
+        angle = math.acos((self.sideSizes[0]**2+self.sideSizes[1]**2-self.sideSizes[2]**2)/
+                (2*self.sideSizes[0]*self.sideSizes[1]))
+        #Covert angle to degrees from radians
+        angle = 180*angle/math.pi
+        print(angle)
         for i in range(0,self.triangles):
             #Get a coordinate for each triangle, then get two more points from 
             #that are equal to the appropriate entry in sideSizes
