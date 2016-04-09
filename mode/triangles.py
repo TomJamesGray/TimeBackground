@@ -17,6 +17,9 @@ class TrianglesImage(DefaultImage):
         self.triangles = int(getConfigPart(self.theme,"triangles"))
     def drawImage(self):
         self.retrieveThemeConfig()
+
+        self.initImg()
+
         #Check that the triangle provided in the config is possible to draw
         #according to the triangle inequality theorem
         print(self.sideSizes)
@@ -38,6 +41,11 @@ class TrianglesImage(DefaultImage):
             #self.cords.append(self.makeCords())
             self.cords = []
             self.cords.append(self.makeCords())
-            self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
+            #Get the second pair of cords using Opposite=Sin(x)*Hypotenuse
+            self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
                 int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[2]))))
+            #Get the final pair of cords
+            self.cords.append((self.cords[0][0]+self.sideSizes[0],
+                self.cords[0][1]))
+
         print(self.cords)

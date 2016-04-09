@@ -49,10 +49,8 @@ class DefaultImage(object):
         for i in range(0,self.strandNum):
             self.startPoints.append(self.makeCords())
  
+        self.initImg()
 
-        #Make a blank image
-        self.img = Image.new('RGBA',(self.width,self.height),color='#' + getConfigPart(self.theme,"bg"))
-        self.draw = ImageDraw.Draw(self.img)
         self.colsDone = 1
         for i in range(0,self.strandNum):
             self.branchResetAt = 0 
@@ -105,3 +103,8 @@ class DefaultImage(object):
         cords = cords + (random.randint(0,self.startBox[0])+int((self.width-self.startBox[0])/2),)
         cords = cords + (random.randint(0,self.startBox[1])+int((self.height-self.startBox[1])/2),)
         return cords
+    def initImg(self):
+        #Make a blank image
+        self.img = Image.new('RGBA',(self.width,self.height),color='#' + getConfigPart(self.theme,"bg"))
+        self.draw = ImageDraw.Draw(self.img)
+
