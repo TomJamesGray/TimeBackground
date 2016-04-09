@@ -31,12 +31,13 @@ class TrianglesImage(DefaultImage):
         #Get first angle required for the triangle with the cosine rule
         angle = math.acos((self.sideSizes[0]**2+self.sideSizes[1]**2-self.sideSizes[2]**2)/
                 (2*self.sideSizes[0]*self.sideSizes[1]))
-        #Covert angle to degrees from radians
-        angle = 180*angle/math.pi
         print(angle)
         for i in range(0,self.triangles):
             #Get a coordinate for each triangle, then get two more points from 
             #that are equal to the appropriate entry in sideSizes
             #self.cords.append(self.makeCords())
-            startCord = self.makeCords()
+            self.cords = []
+            self.cords.append(self.makeCords())
+            self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
+                int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[2]))))
         print(self.cords)
