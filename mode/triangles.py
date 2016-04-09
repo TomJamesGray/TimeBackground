@@ -35,6 +35,7 @@ class TrianglesImage(DefaultImage):
         angle = math.acos((self.sideSizes[0]**2+self.sideSizes[1]**2-self.sideSizes[2]**2)/
                 (2*self.sideSizes[0]*self.sideSizes[1]))
         print(angle)
+
         for i in range(0,self.triangles):
             #Get a coordinate for each triangle, then get two more points from 
             #that are equal to the appropriate entry in sideSizes
@@ -43,9 +44,13 @@ class TrianglesImage(DefaultImage):
             self.cords.append(self.makeCords())
             #Get the second pair of cords using Opposite=Sin(x)*Hypotenuse
             self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
-                int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[2]))))
+                int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
             #Get the final pair of cords
             self.cords.append((self.cords[0][0]+self.sideSizes[0],
                 self.cords[0][1]))
 
+            #Draw the triangle
+            self.draw.polygon(self.cords,'#' + self.colors[0])
+
         print(self.cords)
+        self.img.save("img.png","PNG")
