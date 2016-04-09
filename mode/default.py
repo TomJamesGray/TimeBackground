@@ -1,10 +1,8 @@
+import random,re
 from PIL import Image,ImageDraw
-from helpers.getConfig import getConfigPart
 from helpers.helpers import getArgsBy
-from time import strftime
-import random
-import re
-class MainImage(object):
+from helpers.getConfig import getConfigPart
+class DefaultImage(object):
     def __init__(self,width,height,theme,superSampling):
         self.width = width
         self.height = height
@@ -13,7 +11,7 @@ class MainImage(object):
 
         self.retrieveConfig()
         self.superSamplingEnable()
-       
+
         self.startBox = []
         self.startBox.append(int(width*(1-int(getArgsBy(self.offsets,',')[0])/100)))
         self.startBox.append(int(height*(1-int(getArgsBy(self.offsets,',')[1])/100)))
@@ -107,31 +105,3 @@ class MainImage(object):
         cords = cords + (random.randint(0,self.startBox[0])+int((self.width-self.startBox[0])/2),)
         cords = cords + (random.randint(0,self.startBox[1])+int((self.height-self.startBox[1])/2),)
         return cords
-class TrianglesImage(MainImage):
-    def retrieveThemeConfig(self):
-        self.colors = getArgsBy(getConfigPart(self.theme,"colors"),',')
-        self.bg = '#' + getConfigPart(self.theme,"bg")
-        self.sideSizes = getArgsBy(getConfigPart(self.theme,"sideSizes"),',')
-        #Convert the strings for the side sizes to ints
-        for i in range(0,len(self.sideSizes)):
-            self.sideSizes[i] = int(self.sideSizes[i])
-        self.joined = bool(getConfigPart(self.theme,"joined"))
-        self.triangles = int(getConfigPart(self.theme,"triangles"))
-    def drawImage(self):
-        self.retrieveThemeConfig()
-        #Check that the triangle provided in the config is possible to draw
-        #according to the triangle inequality theorem
-        print(self.sideSizes)
-        if len(self.sideSizes) == 3:
-            if not (self.sideSizes[0] + self.sideSizes[1] > self.sideSizes[2] and 
-                    self.sideSizes[0] + self.sideSizes[2] > self.sideSizes[1] and
-                    self.sideSizes[1] + self.sideSizes[2] > self.sideSizes[0]):
-                raise ValueError("Triangle from sizes in config file is impossible to draw")
-        else:
-            raise ValueError("Insufficient/Too many triangles sizes provided in config file")
-        self.cords = []
-        for i in range(0,self.triangles):
-            #Get a coordinate for each triangle, then get two more points from 
-            #that are equal to the appropriate entry in sideSizes
-            self.cords.append(self.makeCords())
-        print(self.cords)
