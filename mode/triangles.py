@@ -35,8 +35,14 @@ class TrianglesImage(DefaultImage):
         angle = math.acos((self.sideSizes[0]**2+self.sideSizes[1]**2-self.sideSizes[2]**2)/
                 (2*self.sideSizes[0]*self.sideSizes[1]))
         print(angle)
-
+        self.trianglesPerColor = int(self.triangles/len(self.colors))
+        self.colsDone = 0
+        self.color = '#' + self.colors[self.colsDone]
         for i in range(0,self.triangles):
+            if self.colsDone/self.trianglesPerColor < i:
+                self.color = '#' + self.colors[self.colsDone]
+                print("Switching to color {} at triangle no {}".format(self.colsDone,i))
+                self.colsDone += 1
             #Get a coordinate for each triangle, then get two more points from 
             #that are equal to the appropriate entry in sideSizes
             #self.cords.append(self.makeCords())
@@ -50,7 +56,7 @@ class TrianglesImage(DefaultImage):
                 self.cords[0][1]))
 
             #Draw the triangle
-            self.draw.polygon(self.cords,'#' + self.colors[0])
+            self.draw.polygon(self.cords,self.color)
 
         print(self.cords)
         self.img.save("img.png","PNG")
