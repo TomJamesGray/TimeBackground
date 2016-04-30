@@ -5,6 +5,7 @@ from PIL import Image,ImageDraw
 from helpers.helpers import getArgsBy
 from helpers.getConfig import getConfigPart
 import math
+import random
 class TrianglesImage(DefaultImage):
     def retrieveThemeConfig(self):
         self.colors = getArgsBy(getConfigPart(self.theme,"colors"),',')
@@ -39,22 +40,54 @@ class TrianglesImage(DefaultImage):
         self.colsDone = 0
         self.color = '#' + self.colors[self.colsDone]
         for i in range(0,self.triangles):
-            if self.colsDone/self.trianglesPerColor < i:
+            if self.colsDone/self.trianglesPerColor <= i:
                 self.color = '#' + self.colors[self.colsDone]
                 print("Switching to color {} at triangle no {}".format(self.colsDone,i))
                 self.colsDone += 1
-            #Get a coordinate for each triangle, then get two more points from 
-            #that are equal to the appropriate entry in sideSizes
-            #self.cords.append(self.makeCords())
-            self.cords = []
-            self.cords.append(self.makeCords())
-            #Get the second pair of cords using Opposite=Sin(x)*Hypotenuse
-            self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
-                int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
-            #Get the final pair of cords
-            self.cords.append((self.cords[0][0]+self.sideSizes[0],
-                self.cords[0][1]))
-
+            
+            if self.joined and i > 0:
+                #Use a random coordinate from previous triangle
+                #self.randCordNum = random.randint(0,2)
+                self.randCordNum = 0
+                self.cords = [self.cords[self.randCordNum]]
+                # Random number creates triangle in position shown bellow
+                #\¯¯¯ /\¯¯¯¯/
+                # \ 0/  \ 1/
+                #  \/_ __\/ 
+                #   \    /
+                #    \ 2/
+                #     \/
+                # 0 = Bottom left corner of original triangle
+                # 1 = Top corner of original triangle
+                # 2 = Bottom right of original triangle
+                print("randCordNum: {}".format(self.randCordNum))
+                if self.randCordNum == 0:
+                    self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
+                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
+                    self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
+                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
+                elif self.randCordNum == 1:
+                    self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
+                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
+                    self.cords.append((self.cords[0][0]+self.sideSizes[0],
+                        self.cords[0][1]))
+                elif self.randCordNum == 2:
+                    self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
+                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
+                    self.cords.append((int(self.cords[0][0]+self.sideSizes[0]),
+                        self.cords[0][1]))
+                  
+            else:
+                #Get a coordinate for each triangle, then get two more points from 
+                #that are equal to the appropriate entry in sideSizes
+                self.cords = []
+                self.cords.append(self.makeCords())
+                #Get the second pair of cords using Opposite=Sin(x)*Hypotenuse
+                self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
+                    int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
+                #Get the final pair of cords
+                self.cords.append((self.cords[0][0]+self.sideSizes[0],
+                    self.cords[0][1]))
             #Draw the triangle
             self.draw.polygon(self.cords,self.color)
 
