@@ -50,7 +50,7 @@ class TrianglesImage(DefaultImage):
                 if self.oldRandCordNum % 2 == 0:
                     while self.oldRandCordNum != self.randCordNum:
                         #Previous triangle was made with 'even' so this 
-                        #triangle will be made with 'odd' numbers, I'll right docs later, I think....
+                        #triangle will be made with 'odd' numbers, I'll write docs later, I think....
                         #and 7 is used to make randrange go up to 5
                         self.randCordNum = random.randrange(1,7,2)
                 elif self.oldRandCordNum != 0:
