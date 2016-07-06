@@ -59,8 +59,10 @@ class TrianglesImage(DefaultImage):
                             #Use 'even' randCordNum on this triangle
                             self.randCordNum = random.randrange(0,6,2)
                 else:
-                    self.randCordNum = random.randint(0,5)
-                self.randCordNum = 3 
+                    #Previous triangle was made with 0 (even)
+                    #so make this randCordNum odd
+                    self.randCordNum = random.randrange(1,7,2)
+                #self.randCordNum = 5 
                 #Dict to map which cord index should
                 #be used for a specific 'randCordNum'
                 self.cordIndexMap = {
@@ -91,10 +93,10 @@ class TrianglesImage(DefaultImage):
                     self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
                         self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2])))
                 elif self.randCordNum == 5:
-                    self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
-                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
                     self.cords.append((int(self.cords[0][0]+self.sideSizes[0]),
                         self.cords[0][1]))
+                    self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
+                        int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[0]))))
                   
             else:
                 #Get a coordinate for each triangle, then get two more points from 
