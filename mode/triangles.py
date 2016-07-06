@@ -78,7 +78,7 @@ class TrianglesImage(DefaultImage):
                     2:2,
                     3:2,
                     4:1,
-                    5:0
+                    5:2
                 }
                 self.cords = [self.cords[self.cordIndexMap.get(self.randCordNum)]]
                 # Random number creates triangle in position shown bellow:
@@ -103,9 +103,9 @@ class TrianglesImage(DefaultImage):
                     #other triangles made using the 'odd' randCordNums
                     self.cords[0], self.cords[2] = self.cords[2], self.cords[0]
                 elif self.randCordNum == 5:
-                    self.cords.append((int(self.cords[0][0]+self.sideSizes[0]),
+                    self.cords.append((int(self.cords[0][0]-self.sideSizes[0]),
                         self.cords[0][1]))
-                    self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
+                    self.cords.append((self.cords[0][0]-self.sideSizes[0]*0.5,
                         int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[0]))))
                   
             else:
