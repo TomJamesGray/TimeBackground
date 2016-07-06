@@ -46,18 +46,21 @@ class TrianglesImage(DefaultImage):
                 self.colsDone += 1
             
             if self.joined and i > 0:
-                self.oldRandCordNum = self.randCordNum
-                if self.oldRandCordNum % 2 == 0:
-                    while self.oldRandCordNum != self.randCordNum:
-                        #Previous triangle was made with 'even' so this 
-                        #triangle will be made with 'odd' numbers, I'll write docs later, I think....
-                        #and 7 is used to make randrange go up to 5
-                        self.randCordNum = random.randrange(1,7,2)
-                elif self.oldRandCordNum != 0:
-                    while self.oldRandCordNum != self.randCordNum:
-                        #Use 'even' randCordNum on this triangle
-                        self.randCordNum = random.randrange(0,6,2)
-                #self.randCordNum = 1
+                if i > 1:
+                    self.oldRandCordNum = self.randCordNum
+                    if self.oldRandCordNum % 2 == 0:
+                        while self.oldRandCordNum != self.randCordNum:
+                            #Previous triangle was made with 'even' so this 
+                            #triangle will be made with 'odd' numbers, I'll write docs later, I think....
+                            #and 7 is used to make randrange go up to 5
+                            self.randCordNum = random.randrange(1,7,2)
+                    elif self.oldRandCordNum != 0:
+                        while self.oldRandCordNum != self.randCordNum:
+                            #Use 'even' randCordNum on this triangle
+                            self.randCordNum = random.randrange(0,6,2)
+                else:
+                    self.randCordNum = random.randint(0,5)
+                self.randCordNum = 1
                 self.cords = [self.cords[self.randCordNum]]
                 # Random number creates triangle in position shown bellow:
                 # 0 = leftBaseBottom
@@ -68,10 +71,10 @@ class TrianglesImage(DefaultImage):
                 # 5 = downBaseTop
                 print("randCordNum: {}".format(self.randCordNum))
                 if self.randCordNum == 1:
+                    self.cords.append((self.cords[0][0]-self.sideSizes[0],
+                        self.cords[0][1]))
                     self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
-                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
-                    self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
-                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
+                        int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[2]))))
                 elif self.randCordNum == 3:
                     self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
                         int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
