@@ -99,6 +99,9 @@ class TrianglesImage(DefaultImage):
                         int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
                     self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
                         self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2])))
+                    #Swtich 0 and 2 to make the list of cords be in the same order of
+                    #other triangles made using the 'odd' randCordNums
+                    self.cords[0], self.cords[2] = self.cords[2], self.cords[0]
                 elif self.randCordNum == 5:
                     self.cords.append((int(self.cords[0][0]+self.sideSizes[0]),
                         self.cords[0][1]))
@@ -118,6 +121,5 @@ class TrianglesImage(DefaultImage):
                     self.cords[0][1]))
             #Draw the triangle
             self.draw.polygon(self.cords,self.color)
-
-        print(self.cords)
+            print(self.cords)
         self.img.save("img.png","PNG")
