@@ -49,11 +49,18 @@ class TrianglesImage(DefaultImage):
                 if i > 1:
                     self.oldRandCordNum = self.randCordNum
                     if self.oldRandCordNum % 2 == 0:
-                        while self.oldRandCordNum != self.randCordNum:
-                            #Previous triangle was made with 'even' so this 
-                            #triangle will be made with 'odd' numbers, I'll write docs later, I think....
-                            #and 7 is used to make randrange go up to 5
-                            self.randCordNum = random.randrange(1,7,2)
+                        print("Finding odd num")
+                        #Previous triangle was made with 'even' so this 
+                        #triangle will be made with 'odd' numbers, I'll write docs later, I think....
+                        #and 7 is used to make randrange go up to 5
+                        self.randCordNum = random.randrange(1,7,2)
+                    elif self.oldRandCordNum % 2 != 0:
+                        print("Finding even num")
+                        #Previos triangle made with odd so this triangle
+                        #will be made with even numbers
+                        self.randCordNum = random.randrange(0,6,2)
+
+                        print("new cordNum: {}".format(self.randCordNum))
                     elif self.oldRandCordNum != 0:
                         while self.oldRandCordNum != self.randCordNum:
                             #Use 'even' randCordNum on this triangle
