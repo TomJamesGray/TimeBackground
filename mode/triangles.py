@@ -60,8 +60,18 @@ class TrianglesImage(DefaultImage):
                             self.randCordNum = random.randrange(0,6,2)
                 else:
                     self.randCordNum = random.randint(0,5)
-                self.randCordNum = 1
-                self.cords = [self.cords[self.randCordNum]]
+                self.randCordNum = 3 
+                #Dict to map which cord index should
+                #be used for a specific 'randCordNum'
+                self.cordIndexMap = {
+                    0:0,
+                    1:1,
+                    2:2,
+                    3:2,
+                    4:1,
+                    5:0
+                }
+                self.cords = [self.cords[self.cordIndexMap.get(self.randCordNum)]]
                 # Random number creates triangle in position shown bellow:
                 # 0 = leftBaseBottom
                 # 1 = leftBaseTop
@@ -76,10 +86,10 @@ class TrianglesImage(DefaultImage):
                     self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
                         int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[2]))))
                 elif self.randCordNum == 3:
-                    self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
+                    self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
                         int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
-                    self.cords.append((self.cords[0][0]+self.sideSizes[0],
-                        self.cords[0][1]))
+                    self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
+                        self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2])))
                 elif self.randCordNum == 5:
                     self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
                         int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
