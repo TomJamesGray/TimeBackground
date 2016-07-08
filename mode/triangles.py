@@ -91,9 +91,11 @@ class TrianglesImage(DefaultImage):
                 print("randCordNum: {}".format(self.randCordNum))
                 if self.randCordNum == 1:
                     self.cords.append((self.cords[0][0]-self.sideSizes[0],
-                        self.cords[0][1]))
+                        self.cords[0][1])) 
                     self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
                         int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[2]))))
+                    #Swap 0 and 1 around so they're in the expected order
+                    self.cords[0], self.cords[1] = self.cords[1], self.cords[0]
                 elif self.randCordNum == 3:
                     self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
                         int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
