@@ -76,7 +76,7 @@ class TrianglesImage(DefaultImage):
                     0:0,
                     1:1,
                     2:2,
-                    3:2,
+                    3:1,
                     4:1,
                     5:2
                 }
@@ -97,10 +97,10 @@ class TrianglesImage(DefaultImage):
                     #Swap 0 and 1 around so they're in the expected order
                     self.cords[0], self.cords[1] = self.cords[1], self.cords[0]
                 elif self.randCordNum == 3:
-                    self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
-                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
+                    self.cords.append((self.cords[0][0]+self.sideSizes[0],
+                        self.cords[0][1]))
                     self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
-                        self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2])))
+                        self.cords[0][1]+round(math.sin(angle)*self.sideSizes[2])))
                     #Swtich 0 and 2 to make the list of cords be in the same order of
                     #other triangles made using the 'odd' randCordNums
                     self.cords[0], self.cords[2] = self.cords[2], self.cords[0]
