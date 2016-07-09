@@ -44,7 +44,7 @@ class TrianglesImage(DefaultImage):
         self.colsDone = 0
         self.color = '#' + self.colors[self.colsDone]
         for i in range(0,self.triangles):
-            if (i) % self.trianglesPerColor == 0:
+            if i % self.trianglesPerColor == 0:
                 self.color = '#' + self.colors[self.colsDone]
                 print("Switching to color {} at triangle no {}".format(self.colsDone,i))
                 self.colsDone += 1
