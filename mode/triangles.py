@@ -62,7 +62,13 @@ class TrianglesImage(DefaultImage):
                         print("Finding even num")
                         #Previos triangle made with odd so this triangle
                         #will be made with even numbers
-                        self.randCordNum = random.randrange(0,6,2)
+                        if self.oldRandCordNum == 3:
+                            self.randCordNum = random.randrange(2,6,2)
+                        elif self.oldRandCordNum == 1:
+                            #Get 0 or 6 as 3 would just cover the previous triangle
+                            self.randCordNum = random.choice([0,4])
+                        else:
+                            self.randCordNum = random.randrange(0,6,2)
                     elif self.oldRandCordNum != 0:
                         while self.oldRandCordNum != self.randCordNum:
                             #Use 'even' randCordNum on this triangle
