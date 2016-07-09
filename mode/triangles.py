@@ -37,10 +37,11 @@ class TrianglesImage(DefaultImage):
                 (2*self.sideSizes[0]*self.sideSizes[1]))
         print(angle)
         self.trianglesPerColor = int(self.triangles/len(self.colors))
+        print("Triangles per colour: {}".format(self.trianglesPerColor))
         self.colsDone = 0
         self.color = '#' + self.colors[self.colsDone]
         for i in range(0,self.triangles):
-            if self.colsDone/self.trianglesPerColor <= i:
+            if (i) % self.trianglesPerColor == 0:
                 self.color = '#' + self.colors[self.colsDone]
                 print("Switching to color {} at triangle no {}".format(self.colsDone,i))
                 self.colsDone += 1
