@@ -63,7 +63,6 @@ class TrianglesImage(DefaultImage):
                         #Previos triangle made with odd so this triangle
                         #will be made with even numbers
                         self.randCordNum = random.randrange(0,6,2)
-                        print("new cordNum: {}".format(self.randCordNum))
                     elif self.oldRandCordNum != 0:
                         while self.oldRandCordNum != self.randCordNum:
                             #Use 'even' randCordNum on this triangle
@@ -98,6 +97,8 @@ class TrianglesImage(DefaultImage):
                         self.cords[0][1]))
                     self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
                         int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[0]))))
+                    #Swap 0 and 1 around so they're in the expected order
+                    self.cords[0], self.cords[1] = self.cords[1], self.cords[0]
                 elif self.randCordNum == 1:
                     self.cords.append((self.cords[0][0]-self.sideSizes[0],
                         self.cords[0][1])) 
@@ -141,4 +142,5 @@ class TrianglesImage(DefaultImage):
             #Draw the triangle
             self.draw.polygon(self.cords,self.color,self.outlineCol)
             print(self.cords)
+            print("-----------------------------")
         self.img.save("img.png","PNG")
