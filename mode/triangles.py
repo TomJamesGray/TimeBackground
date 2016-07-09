@@ -16,6 +16,9 @@ class TrianglesImage(DefaultImage):
             self.sideSizes[i] = int(self.sideSizes[i])
         self.joined = bool(getConfigPart(self.theme,"joined"))
         self.triangles = int(getConfigPart(self.theme,"triangles"))
+        self.outlineCol = getConfigPart(self.theme,"outline",True)
+        if not self.outlineCol == None:
+            self.outlineCol = '#' + self.outlineCol
     def drawImage(self):
         self.retrieveThemeConfig()
 
@@ -134,7 +137,8 @@ class TrianglesImage(DefaultImage):
                 #Get the second pair of cords using Opposite=Sin(x)*Hypotenuse
                 self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
                     int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
+            
             #Draw the triangle
-            self.draw.polygon(self.cords,self.color)
+            self.draw.polygon(self.cords,self.color,self.outlineCol)
             print(self.cords)
         self.img.save("img.png","PNG")
