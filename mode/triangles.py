@@ -60,7 +60,6 @@ class TrianglesImage(DefaultImage):
                         #Previos triangle made with odd so this triangle
                         #will be made with even numbers
                         self.randCordNum = random.randrange(0,6,2)
-                        self.randCordNum = 4
                         print("new cordNum: {}".format(self.randCordNum))
                     elif self.oldRandCordNum != 0:
                         while self.oldRandCordNum != self.randCordNum:
