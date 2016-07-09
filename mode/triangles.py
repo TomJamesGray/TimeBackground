@@ -59,6 +59,7 @@ class TrianglesImage(DefaultImage):
                         #Previos triangle made with odd so this triangle
                         #will be made with even numbers
                         self.randCordNum = random.randrange(0,6,2)
+                        self.randCordNum = 0
                         print("new cordNum: {}".format(self.randCordNum))
                     elif self.oldRandCordNum != 0:
                         while self.oldRandCordNum != self.randCordNum:
@@ -67,6 +68,7 @@ class TrianglesImage(DefaultImage):
                 else:
                     #Previous triangle was made with 0 (even)
                     #so make this randCordNum odd
+                    print("Finding odd num (1st randCordNum)")
                     self.randCordNum = random.randrange(1,7,2)
                 #self.randCordNum = 5 
                 #Dict to map which cord index should
@@ -75,7 +77,7 @@ class TrianglesImage(DefaultImage):
                     0:2,
                     1:1,
                     2:2,
-                    3:1,
+                    3:2,
                     4:1,
                     5:0
                 }
@@ -116,12 +118,12 @@ class TrianglesImage(DefaultImage):
                 #that are equal to the appropriate entry in sideSizes
                 self.cords = []
                 self.cords.append(self.makeCords())
+                #Get the first pair of cords
+                self.cords.append((self.cords[0][0]+self.sideSizes[0],
+                    self.cords[0][1]))
                 #Get the second pair of cords using Opposite=Sin(x)*Hypotenuse
                 self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
                     int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
-                #Get the final pair of cords
-                self.cords.append((self.cords[0][0]+self.sideSizes[0],
-                    self.cords[0][1]))
             #Draw the triangle
             self.draw.polygon(self.cords,self.color)
             print(self.cords)
