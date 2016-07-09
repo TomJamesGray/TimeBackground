@@ -59,6 +59,7 @@ class TrianglesImage(DefaultImage):
                         #Previos triangle made with odd so this triangle
                         #will be made with even numbers
                         self.randCordNum = random.randrange(0,6,2)
+                        self.randCordNum = 4
                         print("new cordNum: {}".format(self.randCordNum))
                     elif self.oldRandCordNum != 0:
                         while self.oldRandCordNum != self.randCordNum:
@@ -74,10 +75,10 @@ class TrianglesImage(DefaultImage):
                 #be used for a specific 'randCordNum'
                 self.cordIndexMap = {
                     0:2,
-                    1:1,
+                    1:2,
                     2:2,
                     3:2,
-                    4:1,
+                    4:0,
                     5:0
                 }
                 self.cords = [self.cords[self.cordIndexMap.get(self.randCordNum)]]
@@ -111,6 +112,11 @@ class TrianglesImage(DefaultImage):
                         self.cords[0][1]))
                     self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
                         self.cords[0][1]+round(math.sin(angle)*self.sideSizes[2])))
+                elif self.randCordNum == 4:
+                    self.cords.append((self.cords[0][0]+self.sideSizes[0],
+                        self.cords[0][1]))
+                    self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
+                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[0]))))
                 elif self.randCordNum == 5:
                     self.cords.append((int(self.cords[0][0]+self.sideSizes[0]),
                         self.cords[0][1]))
