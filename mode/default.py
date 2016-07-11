@@ -9,16 +9,14 @@ class DefaultImage(object):
         self.theme = theme
         self.superSampling = superSampling
 
-        self.retrieveConfig()
         self.superSamplingEnable()
-
+        
+        self.offsets = getConfigPart(theme,"offsetBoundingBox")
         self.startBox = []
         self.startBox.append(int(width*(1-int(getArgsBy(self.offsets,',')[0])/100)))
         self.startBox.append(int(height*(1-int(getArgsBy(self.offsets,',')[1])/100)))
         
         print("startBox: {}".format(self.startBox))
-    def retrieveConfig(self):
-        self.offsets = getConfigPart("main","offsetBoundingBox")
     
     def retrieveThemeConfig(self):
         #This differs from the above fuction as these config keys are dependent
