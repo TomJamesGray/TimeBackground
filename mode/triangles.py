@@ -7,6 +7,15 @@ from helpers.getConfig import getConfigPart
 import math
 import random
 class TrianglesImage(DefaultImage):
+    def superSamplingEnable(self):
+        if self.superSampling:
+            print("Enabling super sampling")
+            self.width *= 2
+            self.height *= 2
+            for i in range(0,len(self.sideSizes)):
+                self.sideSizes[i] *= 2 
+            
+
     def retrieveThemeConfig(self):
         self.colors = getArgsBy(getConfigPart(self.theme,"colors"),',')
         self.bg = '#' + getConfigPart(self.theme,"bg")
@@ -19,11 +28,14 @@ class TrianglesImage(DefaultImage):
         self.outlineCol = getConfigPart(self.theme,"outline",True)
         if not self.outlineCol == None:
             self.outlineCol = '#' + self.outlineCol
+        #Enable superSampling if asked
+        self.superSamplingEnable()
+
     def drawImage(self):
         self.retrieveThemeConfig()
 
         self.initImg()
-
+        
         #Check that the triangle provided in the config is possible to draw
         #according to the triangle inequality theorem
         print(self.sideSizes)
@@ -150,4 +162,5 @@ class TrianglesImage(DefaultImage):
             self.draw.polygon(self.cords,self.color,self.outlineCol)
             print(self.cords)
             print("-----------------------------")
-        self.img.save("img.png","PNG")
+        print("Side sizes: {}".format(self.sideSizes))
+        self.exportImg()

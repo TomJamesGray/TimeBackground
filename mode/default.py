@@ -9,8 +9,6 @@ class DefaultImage(object):
         self.theme = theme
         self.superSampling = superSampling
 
-        self.superSamplingEnable()
-        
         self.offsets = getConfigPart(theme,"offsetBoundingBox")
         self.startBox = []
         self.startBox.append(int(width*(1-int(getArgsBy(self.offsets,',')[0])/100)))
@@ -29,12 +27,23 @@ class DefaultImage(object):
         self.thickness = int(getConfigPart(self.theme,"thickness"))
         self.maxBranchTurns = int(getConfigPart(self.theme,"maxBranchTurns"))
 
+        #Enable superSampling if wanted
+        self.superSamplingEnable()
+
     def superSamplingEnable(self):
         if self.superSampling:
             self.width *= 2
             self.height *= 2
             self.branchDist *= 2
             self.thickness *= 2
+    
+    #Exports the image and check if super sampling is enabled, if so
+    #It will resize the exported image as needed
+    def exportImg(self):
+        if self.superSampling:
+            print("Exporting with size adjusted")
+            self.img = self.img.resize((int(self.width/2),int(self.height/2)),Image.NEAREST)
+        self.img.save("img.png","PNG")
 
     def drawImage(self):
         #Draw the image, this will be over-ridden by class for other
@@ -89,10 +98,7 @@ class DefaultImage(object):
                         self.branchResetAt = j
 
         del self.draw
-        if self.superSampling:
-            self.img = img.resize((int(self.width/2),int(self.height/2)),Image.NEAREST)
-        self.img.save("img.png","PNG")
-
+        self.exportImg()
         #print(startBox)
         #print(sections)
 
