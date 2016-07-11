@@ -67,8 +67,9 @@ class TrianglesImage(DefaultImage):
                         elif self.oldRandCordNum == 1:
                             #Get 0 or 6 as 3 would just cover the previous triangle
                             self.randCordNum = random.choice([0,4])
-                        else:
-                            self.randCordNum = random.randrange(0,6,2)
+                        elif self.oldRandCordNum == 5:
+                            #Get 0 or 2 as 4 would just cover the previous triangle
+                            self.randCordNum = random.randrange(0,4,2)
                     elif self.oldRandCordNum != 0:
                         while self.oldRandCordNum != self.randCordNum:
                             #Use 'even' randCordNum on this triangle
