@@ -6,3 +6,5 @@ Creates a random background, with varying colour schemes according to the time o
 ![Night Theme](night.png)
 ###Morning-purple
 ![Morning purple theme](morning-purple.png)
+###Forest
+![Forest theme](forest.png)
