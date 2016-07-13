@@ -23,7 +23,7 @@ class TrianglesImage(DefaultImage):
         #Convert the strings for the side sizes to ints
         for i in range(0,len(self.sideSizes)):
             self.sideSizes[i] = int(self.sideSizes[i])
-        self.joined = bool(getConfigPart(self.theme,"joined"))
+        self.joined = bool(int(getConfigPart(self.theme,"joined")))
         self.triangles = int(getConfigPart(self.theme,"triangles"))
         self.outlineCol = getConfigPart(self.theme,"outline",True)
         if not self.outlineCol == None:
@@ -35,7 +35,7 @@ class TrianglesImage(DefaultImage):
         self.retrieveThemeConfig()
 
         self.initImg()
-        
+        print("Joined: {}".format(self.joined)) 
         #Check that the triangle provided in the config is possible to draw
         #according to the triangle inequality theorem
         print(self.sideSizes)
@@ -145,8 +145,10 @@ class TrianglesImage(DefaultImage):
                         self.cords[0][1]))
                     self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
                         int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[0]))))
-                  
+
+            # Not joined theme or first triangle      
             else:
+                print("Random triangle")
                 #Get a coordinate for each triangle, then get two more points from 
                 #that are equal to the appropriate entry in sideSizes
                 self.cords = []
