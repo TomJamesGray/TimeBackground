@@ -8,6 +8,7 @@ def main(args):
     #Define arguments
     parser.add_argument('width',action='store', type=int)
     parser.add_argument('height',action='store',type=int)
+    parser.add_argument('fileName',action='store',type=str)
     parser.add_argument('--theme',default="theme-default",action='store',type=str)
     parser.add_argument('-s',action='store_true')
     results = parser.parse_args(args)
@@ -15,6 +16,7 @@ def main(args):
     height = results.height
     theme = results.theme
     superSampling = results.s
+    fileName = results.fileName
     
     print(superSampling)
     if width <= 0 or height <= 0:
@@ -22,9 +24,9 @@ def main(args):
         return 1
     imageMode = getImageMode(theme)
     if imageMode == "default":
-        img = default.DefaultImage(width,height,theme,superSampling)
+        img = default.DefaultImage(width,height,theme,superSampling,fileName)
     elif imageMode == "triangles":
-        img = triangles.TrianglesImage(width,height,theme,superSampling)
+        img = triangles.TrianglesImage(width,height,theme,superSampling,fileName)
     img.drawImage()
     
     return 0

@@ -3,11 +3,12 @@ from PIL import Image,ImageDraw
 from helpers.helpers import getArgsBy
 from helpers.getConfig import getConfigPart
 class DefaultImage(object):
-    def __init__(self,width,height,theme,superSampling):
+    def __init__(self,width,height,theme,superSampling,fileName):
         self.width = width
         self.height = height
         self.theme = theme
         self.superSampling = superSampling
+        self.fileName = fileName
 
         self.offsets = getConfigPart(theme,"offsetBoundingBox")
         self.startBox = []
@@ -43,7 +44,7 @@ class DefaultImage(object):
         if self.superSampling:
             print("Exporting with size adjusted")
             self.img = self.img.resize((int(self.width/2),int(self.height/2)),Image.NEAREST)
-        self.img.save("img.png","PNG")
+        self.img.save(self.fileName,"PNG")
 
     def drawImage(self):
         #Draw the image, this will be over-ridden by class for other
