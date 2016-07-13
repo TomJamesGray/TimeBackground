@@ -38,7 +38,6 @@ class TrianglesImage(DefaultImage):
         print("Joined: {}".format(self.joined)) 
         #Check that the triangle provided in the config is possible to draw
         #according to the triangle inequality theorem
-        print(self.sideSizes)
         if len(self.sideSizes) == 3:
             if not (self.sideSizes[0] + self.sideSizes[1] > self.sideSizes[2] and 
                     self.sideSizes[0] + self.sideSizes[2] > self.sideSizes[1] and
@@ -50,9 +49,7 @@ class TrianglesImage(DefaultImage):
         #Get first angle required for the triangle with the cosine rule
         angle = math.acos((self.sideSizes[0]**2+self.sideSizes[1]**2-self.sideSizes[2]**2)/
                 (2*self.sideSizes[0]*self.sideSizes[1]))
-        print(angle)
         self.trianglesPerColor = int(self.triangles/len(self.colors))
-        print("Triangles per colour: {}".format(self.trianglesPerColor))
         self.colsDone = 0
         self.color = '#' + self.colors[self.colsDone]
         for i in range(0,self.triangles):
@@ -148,7 +145,6 @@ class TrianglesImage(DefaultImage):
 
             # Not joined theme or first triangle      
             else:
-                print("Random triangle")
                 #Get a coordinate for each triangle, then get two more points from 
                 #that are equal to the appropriate entry in sideSizes
                 self.cords = []
@@ -164,5 +160,4 @@ class TrianglesImage(DefaultImage):
             self.draw.polygon(self.cords,self.color,self.outlineCol)
             print(self.cords)
             print("-----------------------------")
-        print("Side sizes: {}".format(self.sideSizes))
         self.exportImg()
