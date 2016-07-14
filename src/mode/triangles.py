@@ -1,9 +1,9 @@
 #Import the DefaultImage class to allow the triangles class
 #To inherit from it
-from mode.default import DefaultImage
+from src.mode.default import DefaultImage
 from PIL import Image,ImageDraw
-from helpers.helpers import getArgsBy
-from helpers.getConfig import getConfigPart
+from src.helpers.helpers import getArgsBy
+from src.helpers.getConfig import getConfigPart
 import math
 import random
 class TrianglesImage(DefaultImage):

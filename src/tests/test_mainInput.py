@@ -1,4 +1,4 @@
-from main import main
+from src.main import main
 def testZeroArgs():
     assert main(['0','0']) == 1 
 def testIntArgs():

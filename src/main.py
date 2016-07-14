@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import argparse
 import sys
-from helpers.getConfig import getConfigPart
-from mode import *
+from src.helpers.getConfig import getConfigPart
+from src.mode import default,triangles,timeMode
 def main(args):
     parser = argparse.ArgumentParser(description='timeBackground')
     #Define arguments
@@ -27,10 +27,13 @@ def main(args):
         img = default.DefaultImage(width,height,theme,superSampling,fileName)
     elif imageMode == "triangles":
         img = triangles.TrianglesImage(width,height,theme,superSampling,fileName)
+    elif imageMode == "time":
+        img = timeMode.TimeMode(width,height,theme,superSampling,fileName)
     img.drawImage()
     
     return 0
 def getImageMode(theme):
     return getConfigPart(theme,"mode")
 if __name__ == '__main__':
+    print(sys.argv)
     main(sys.argv[1:])

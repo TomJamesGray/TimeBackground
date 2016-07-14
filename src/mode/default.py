@@ -1,7 +1,7 @@
 import random,re
 from PIL import Image,ImageDraw
-from helpers.helpers import getArgsBy
-from helpers.getConfig import getConfigPart
+from src.helpers.helpers import getArgsBy
+from src.helpers.getConfig import getConfigPart
 class DefaultImage(object):
     def __init__(self,width,height,theme,superSampling,fileName):
         self.width = width
