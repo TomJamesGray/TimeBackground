@@ -68,7 +68,7 @@ class DefaultImage(object):
                 cords[-1].append((cords[-1][-1][0],cords[-1][-1][1]-self.branchDist))
             elif direction == 3:
                 cords[-1].append((cords[-1][-1][0]-self.branchDist,cords[-1][-1][1]))
-
+            
             if j-branchResetAt ==  self.maxBranchTurns:
                 cords.append(self.makeCords())
                 branchResetAt = j
@@ -76,7 +76,7 @@ class DefaultImage(object):
             #abandon the strand which is off the page
             if (cords[-1][-1][0] > self.width or cords[-1][-1][0] < 0 or
                 cords[-1][-1][1] > self.height or cords[-1][-1][1] < 0):
-                    cords.append(self.makeCords())
+                    cords.append([self.makeCords()])
                     branchResetAt = j
         return cords
     def drawImage(self):
