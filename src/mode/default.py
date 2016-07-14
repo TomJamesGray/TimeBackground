@@ -16,6 +16,8 @@ class DefaultImage(object):
         self.startBox.append(int(width*(1-int(getArgsBy(self.offsets,',')[0])/100)))
         self.startBox.append(int(height*(1-int(getArgsBy(self.offsets,',')[1])/100)))
         
+        self.colsSwitchIndexes = []
+        
         print("startBox: {}".format(self.startBox))
     
     def retrieveThemeConfig(self):
@@ -28,7 +30,7 @@ class DefaultImage(object):
         self.strandNum = int(getConfigPart(self.theme,"strands"))
         self.thickness = int(getConfigPart(self.theme,"thickness"))
         self.maxBranchTurns = int(getConfigPart(self.theme,"maxBranchTurns"))
-
+        self.branchesPerColor = int(self.branches/len(self.colors))
         #Enable superSampling if wanted
         self.superSamplingEnable()
 
@@ -54,10 +56,11 @@ class DefaultImage(object):
         #    self.color = '#' + self.colors[self.colsDone]
         #    print("Switching to color {} at branch no {}".format(self.colsDone,j))
         #    self.colsDone += 1
-
         branchResetAt = 0
-        color = '#' + self.colors[strandNum]
         for j in range(0,branchesForStrand):
+            if (strandNum + 1) * j > self.colsPerBranch * (strandNum + 1):
+                self.colsSwithcIndexes.append(j)
+
             direction = random.randint(0,3)
             #0=up, 1 left, 2=down, 3=right
             if direction == 0:
