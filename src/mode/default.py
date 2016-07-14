@@ -46,6 +46,43 @@ class DefaultImage(object):
             self.img = self.img.resize((int(self.width/2),int(self.height/2)),Image.NEAREST)
         self.img.save(self.fileName,"PNG")
 
+    def strandWorker(self,strandNum,branchesForStrand):
+        self.startPoints = self.makeCords()
+#            if self.colsDone*self.branches/len(self.colors) < j:
+#                self.color = '#' + self.colors[self.colsDone]
+#                print("Switching to color {} at branch no {}".format(self.colsDone,j))
+#                self.colsDone += 1
+        self.branchResetAt = 0
+        self.color = '#' + self.colors[strandNum]
+        for j in range(0,branchesForStrand):
+            self.direction = random.randint(0,3)
+            #0=up, 1 left, 2=down, 3=right
+            if self.direction == 0:
+                self.newCords = (self.startPoints[0],self.startPoints[1]+self.branchDist)
+                self.draw.line([self.startPoints,self.newCords],self.color,self.thickness)
+                self.startPoints = self.newCords
+            elif self.direction == 1:
+                self.newCords = (self.startPoints[0]+self.branchDist,self.startPoints[1])
+                self.draw.line([self.startPoints,self.newCords],self.color,self.thickness)
+                self.startPoints = self.newCords
+            elif self.direction == 2:
+                self.newCords = (self.startPoints[0],self.startPoints[1]-self.branchDist)
+                self.draw.line([self.startPoints,self.newCords],self.color, self.thickness)
+                self.startPoints = self.newCords
+            elif self.direction == 3:
+                self.newCords = (self.startPoints[0]-self.branchDist,self.startPoints[1])
+                self.draw.line([self.startPoints,self.newCords],self.color,self.thickness)
+                self.startPoints = self.newCords
+            if j-self.branchResetAt ==  self.maxBranchTurns:
+                self.startPoints = self.makeCords()
+                self.branchResetAt = j
+            #Check if coordinates have gone off the image and if so start a new strand and
+            #abandon the strand which is off the page
+            if (self.startPoints[0] > self.width or self.startPoints[0] < 0 or
+                self.startPoints[1] > self.height or self.startPoints[1] < 0):
+                    self.startPoints = self.makeCords() 
+                    self.branchResetAt = j
+
     def drawImage(self):
         #Draw the image, this will be over-ridden by class for other
         #image modes, so this will only be used for the default theme
@@ -53,50 +90,17 @@ class DefaultImage(object):
         self.retrieveThemeConfig()
  
         #Generate the start points
-        self.startPoints = []
-        for i in range(0,self.strandNum):
-            self.startPoints.append(self.makeCords())
+        #self.startPoints = []
+        #for i in range(0,self.strandNum):
+        #    self.startPoints.append(self.makeCords())
  
         self.initImg()
 
         self.colsDone = 1
         for i in range(0,self.strandNum):
-            self.branchResetAt = 0 
-            for j in range(0,self.branches):
-                if self.colsDone*self.branches/len(self.colors) < j:
-                    self.color = '#' + self.colors[self.colsDone]
-                    print("Switching to color {} at branch no {}".format(self.colsDone,j))
-                    self.colsDone += 1
-                else:
-                    self.color = '#' + self.colors[self.colsDone-1]
+            self.strandWorker(i,int(self.branches/self.strandNum))
+#            for j in range(0,self.branches):
 
-                self.direction = random.randint(0,3)
-                #0=up, 1 left, 2=down, 3=right
-                if self.direction == 0:
-                    self.newCords = (self.startPoints[i][0],self.startPoints[i][1]+self.branchDist)
-                    self.draw.line([self.startPoints[i],self.newCords],self.color,self.thickness)
-                    self.startPoints[i] = self.newCords
-                elif self.direction == 1:
-                    self.newCords = (self.startPoints[i][0]+self.branchDist,self.startPoints[i][1])
-                    self.draw.line([self.startPoints[i],self.newCords],self.color,self.thickness)
-                    self.startPoints[i] = self.newCords
-                elif self.direction == 2:
-                    self.newCords = (self.startPoints[i][0],self.startPoints[i][1]-self.branchDist)
-                    self.draw.line([self.startPoints[i],self.newCords],self.color, self.thickness)
-                    self.startPoints[i] = self.newCords
-                elif self.direction == 3:
-                    self.newCords = (self.startPoints[i][0]-self.branchDist,self.startPoints[i][1])
-                    self.draw.line([self.startPoints[i],self.newCords],self.color,self.thickness)
-                    self.startPoints[i] = self.newCords
-                if j-self.branchResetAt ==  self.maxBranchTurns:
-                    self.startPoints[i] = self.makeCords()
-                    self.branchResetAt = j
-                #Check if coordinates have gone off the image and if so start a new strand and
-                #abandon the strand which is off the page
-                if (self.startPoints[i][0] > self.width or self.startPoints[i][0] < 0 or
-                    self.startPoints[i][1] > self.height or self.startPoints[i][1] < 0):
-                        self.startPoints[i] = self.makeCords() 
-                        self.branchResetAt = j
 
         del self.draw
         self.exportImg()
