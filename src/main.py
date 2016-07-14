@@ -13,9 +13,9 @@ def main(args):
     parser.add_argument('-s',action='store_true')
     results = parser.parse_args(args)
     #Run the theme with the specified parameters
-    runIt(results.width,results.height,results.fileName,
+    return runIt(results.width,results.height,results.fileName,
             results.theme,results.s)
-
+    
 def runIt(width,height,fileName,theme="theme-default",superSampling=False):
     if width <= 0 or height <= 0:
         print('Invalid height or width')
