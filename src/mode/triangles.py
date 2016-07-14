@@ -19,10 +19,7 @@ class TrianglesImage(DefaultImage):
     def retrieveThemeConfig(self):
         self.colors = getArgsBy(getConfigPart(self.theme,"colors"),',')
         self.bg = '#' + getConfigPart(self.theme,"bg")
-        self.sideSizes = getArgsBy(getConfigPart(self.theme,"sideSizes"),',')
-        #Convert the strings for the side sizes to ints
-        for i in range(0,len(self.sideSizes)):
-            self.sideSizes[i] = int(self.sideSizes[i])
+        self.sideSize = int(getConfigPart(self.theme,"sideSizes"))
         self.joined = bool(int(getConfigPart(self.theme,"joined")))
         self.triangles = int(getConfigPart(self.theme,"triangles"))
         self.outlineCol = getConfigPart(self.theme,"outline",True)
@@ -36,19 +33,10 @@ class TrianglesImage(DefaultImage):
 
         self.initImg()
         print("Joined: {}".format(self.joined)) 
-        #Check that the triangle provided in the config is possible to draw
-        #according to the triangle inequality theorem
-        if len(self.sideSizes) == 3:
-            if not (self.sideSizes[0] + self.sideSizes[1] > self.sideSizes[2] and 
-                    self.sideSizes[0] + self.sideSizes[2] > self.sideSizes[1] and
-                    self.sideSizes[1] + self.sideSizes[2] > self.sideSizes[0]):
-                raise ValueError("Triangle from sizes in config file is impossible to draw")
-        else:
-            raise ValueError("Insufficient/Too many triangles sizes provided in config file")
         self.cords = []
         #Get first angle required for the triangle with the cosine rule
-        angle = math.acos((self.sideSizes[0]**2+self.sideSizes[1]**2-self.sideSizes[2]**2)/
-                (2*self.sideSizes[0]*self.sideSizes[1]))
+        angle = math.acos((self.sideSize**2+self.sideSize**2-self.sideSize**2)/
+                (2*self.sideSize*self.sideSize))
         self.trianglesPerColor = int(self.triangles/len(self.colors))
         self.colsDone = 0
         self.color = '#' + self.colors[self.colsDone]
@@ -109,39 +97,39 @@ class TrianglesImage(DefaultImage):
                 # 5 = downBaseTop
                 print("randCordNum: {}".format(self.randCordNum))
                 if self.randCordNum == 0:
-                    self.cords.append((self.cords[0][0]-self.sideSizes[0],
+                    self.cords.append((self.cords[0][0]-self.sideSize,
                         self.cords[0][1]))
-                    self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
-                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[0]))))
+                    self.cords.append((int(self.cords[0][0]-self.sideSize*0.5),
+                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSize))))
                     #Swap 0 and 1 around so they're in the expected order
                     self.cords[0], self.cords[1] = self.cords[1], self.cords[0]
                 elif self.randCordNum == 1:
-                    self.cords.append((self.cords[0][0]-self.sideSizes[0],
+                    self.cords.append((self.cords[0][0]-self.sideSize,
                         self.cords[0][1])) 
-                    self.cords.append((int(self.cords[0][0]-self.sideSizes[0]*0.5),
-                        int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[2]))))
+                    self.cords.append((int(self.cords[0][0]-self.sideSize*0.5),
+                        int(self.cords[0][1]+round(math.sin(angle)*self.sideSize))))
                     #Swap 0 and 1 around so they're in the expected order
                     self.cords[0], self.cords[1] = self.cords[1], self.cords[0]
                 elif self.randCordNum == 2:
-                    self.cords.append((self.cords[0][0]+self.sideSizes[0],
+                    self.cords.append((self.cords[0][0]+self.sideSize,
                         self.cords[0][1]))
-                    self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
-                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[0]))))
+                    self.cords.append((int(self.cords[0][0]+self.sideSize*0.5),
+                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSize))))
                 elif self.randCordNum == 3:
-                    self.cords.append((self.cords[0][0]+self.sideSizes[0],
+                    self.cords.append((self.cords[0][0]+self.sideSize,
                         self.cords[0][1]))
-                    self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
-                        self.cords[0][1]+round(math.sin(angle)*self.sideSizes[2])))
+                    self.cords.append((self.cords[0][0]+self.sideSize*0.5,
+                        self.cords[0][1]+round(math.sin(angle)*self.sideSize)))
                 elif self.randCordNum == 4:
-                    self.cords.append((self.cords[0][0]+self.sideSizes[0],
+                    self.cords.append((self.cords[0][0]+self.sideSize,
                         self.cords[0][1]))
-                    self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
-                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[0]))))
+                    self.cords.append((self.cords[0][0]+self.sideSize*0.5,
+                        int(self.cords[0][1]-round(math.sin(angle)*self.sideSize))))
                 elif self.randCordNum == 5:
-                    self.cords.append((int(self.cords[0][0]+self.sideSizes[0]),
+                    self.cords.append((int(self.cords[0][0]+self.sideSize),
                         self.cords[0][1]))
-                    self.cords.append((self.cords[0][0]+self.sideSizes[0]*0.5,
-                        int(self.cords[0][1]+round(math.sin(angle)*self.sideSizes[0]))))
+                    self.cords.append((self.cords[0][0]+self.sideSize*0.5,
+                        int(self.cords[0][1]+round(math.sin(angle)*self.sideSize))))
 
             # Not joined theme or first triangle      
             else:
@@ -150,11 +138,11 @@ class TrianglesImage(DefaultImage):
                 self.cords = []
                 self.cords.append(self.makeCords())
                 #Get the first pair of cords
-                self.cords.append((self.cords[0][0]+self.sideSizes[0],
+                self.cords.append((self.cords[0][0]+self.sideSize,
                     self.cords[0][1]))
                 #Get the second pair of cords using Opposite=Sin(x)*Hypotenuse
-                self.cords.append((int(self.cords[0][0]+self.sideSizes[0]*0.5),
-                    int(self.cords[0][1]-round(math.sin(angle)*self.sideSizes[2]))))
+                self.cords.append((int(self.cords[0][0]+self.sideSize*0.5),
+                    int(self.cords[0][1]-round(math.sin(angle)*self.sideSize))))
             
             #Draw the triangle
             self.draw.polygon(self.cords,self.color,self.outlineCol)
