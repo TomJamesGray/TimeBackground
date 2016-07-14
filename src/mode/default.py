@@ -2,6 +2,7 @@ import random,re
 from PIL import Image,ImageDraw
 from src.helpers.helpers import getArgsBy
 from src.helpers.getConfig import getConfigPart
+import multiprocessing as mp
 class DefaultImage(object):
     def __init__(self,width,height,theme,superSampling,fileName):
         self.width = width
@@ -47,42 +48,37 @@ class DefaultImage(object):
         self.img.save(self.fileName,"PNG")
 
     def strandWorker(self,strandNum,branchesForStrand):
-        self.startPoints = self.makeCords()
-#            if self.colsDone*self.branches/len(self.colors) < j:
-#                self.color = '#' + self.colors[self.colsDone]
-#                print("Switching to color {} at branch no {}".format(self.colsDone,j))
-#                self.colsDone += 1
-        self.branchResetAt = 0
-        self.color = '#' + self.colors[strandNum]
+        cords = []
+        cords.append([self.makeCords()])
+        #if self.colsDone*self.branches/len(self.colors) < j:
+        #    self.color = '#' + self.colors[self.colsDone]
+        #    print("Switching to color {} at branch no {}".format(self.colsDone,j))
+        #    self.colsDone += 1
+
+        branchResetAt = 0
+        color = '#' + self.colors[strandNum]
         for j in range(0,branchesForStrand):
-            self.direction = random.randint(0,3)
+            direction = random.randint(0,3)
             #0=up, 1 left, 2=down, 3=right
-            if self.direction == 0:
-                self.newCords = (self.startPoints[0],self.startPoints[1]+self.branchDist)
-                self.draw.line([self.startPoints,self.newCords],self.color,self.thickness)
-                self.startPoints = self.newCords
-            elif self.direction == 1:
-                self.newCords = (self.startPoints[0]+self.branchDist,self.startPoints[1])
-                self.draw.line([self.startPoints,self.newCords],self.color,self.thickness)
-                self.startPoints = self.newCords
-            elif self.direction == 2:
-                self.newCords = (self.startPoints[0],self.startPoints[1]-self.branchDist)
-                self.draw.line([self.startPoints,self.newCords],self.color, self.thickness)
-                self.startPoints = self.newCords
-            elif self.direction == 3:
-                self.newCords = (self.startPoints[0]-self.branchDist,self.startPoints[1])
-                self.draw.line([self.startPoints,self.newCords],self.color,self.thickness)
-                self.startPoints = self.newCords
-            if j-self.branchResetAt ==  self.maxBranchTurns:
-                self.startPoints = self.makeCords()
-                self.branchResetAt = j
+            if direction == 0:
+                cords[-1].append((cords[-1][-1][0],cords[-1][-1][1]+self.branchDist))
+            elif direction == 1:
+                cords[-1].append((cords[-1][-1][0]+self.branchDist,cords[-1][-1][1]))
+            elif direction == 2:
+                cords[-1].append((cords[-1][-1][0],cords[-1][-1][1]-self.branchDist))
+            elif direction == 3:
+                cords[-1].append((cords[-1][-1][0]-self.branchDist,cords[-1][-1][1]))
+
+            if j-branchResetAt ==  self.maxBranchTurns:
+                cords.append(self.makeCords())
+                branchResetAt = j
             #Check if coordinates have gone off the image and if so start a new strand and
             #abandon the strand which is off the page
-            if (self.startPoints[0] > self.width or self.startPoints[0] < 0 or
-                self.startPoints[1] > self.height or self.startPoints[1] < 0):
-                    self.startPoints = self.makeCords() 
-                    self.branchResetAt = j
-
+            if (cords[-1][-1][0] > self.width or cords[-1][-1][0] < 0 or
+                cords[-1][-1][1] > self.height or cords[-1][-1][1] < 0):
+                    cords.append(self.makeCords())
+                    branchResetAt = j
+        return cords
     def drawImage(self):
         #Draw the image, this will be over-ridden by class for other
         #image modes, so this will only be used for the default theme
@@ -95,13 +91,15 @@ class DefaultImage(object):
         #    self.startPoints.append(self.makeCords())
  
         self.initImg()
-
+        allCords = []
         self.colsDone = 1
         for i in range(0,self.strandNum):
-            self.strandWorker(i,int(self.branches/self.strandNum))
+            allCords.append(self.strandWorker(i,int(self.branches/self.strandNum)))
 #            for j in range(0,self.branches):
-
-
+        print("Strand workers finished")
+        for k in range(0,len(allCords)):
+            for l in range(0,len(allCords[k])):
+                self.draw.line(allCords[k][l])
         del self.draw
         self.exportImg()
         #print(startBox)
