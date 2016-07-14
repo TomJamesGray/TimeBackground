@@ -12,8 +12,7 @@ class TrianglesImage(DefaultImage):
             print("Enabling super sampling")
             self.width *= 2
             self.height *= 2
-            for i in range(0,len(self.sideSizes)):
-                self.sideSizes[i] *= 2 
+            self.sideSize *= 2 
             
 
     def retrieveThemeConfig(self):
