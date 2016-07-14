@@ -16,7 +16,7 @@ class DefaultImage(object):
         self.startBox.append(int(width*(1-int(getArgsBy(self.offsets,',')[0])/100)))
         self.startBox.append(int(height*(1-int(getArgsBy(self.offsets,',')[1])/100)))
         
-        self.colsSwitchIndexes = []
+        self.colSwitchIndexes = []
         
         print("startBox: {}".format(self.startBox))
     
@@ -49,7 +49,7 @@ class DefaultImage(object):
             self.img = self.img.resize((int(self.width/2),int(self.height/2)),Image.NEAREST)
         self.img.save(self.fileName,"PNG")
 
-    def strandWorker(self,strandNum,branchesForStrand):
+    def strandWorker(self,queue,strandNum,branchesForStrand):
         cords = []
         cords.append([self.makeCords()])
         #if self.colsDone*self.branches/len(self.colors) < j:
@@ -58,8 +58,8 @@ class DefaultImage(object):
         #    self.colsDone += 1
         branchResetAt = 0
         for j in range(0,branchesForStrand):
-            if (strandNum + 1) * j > self.colsPerBranch * (strandNum + 1):
-                self.colsSwithcIndexes.append(j)
+            if (strandNum + 1) * j >= self.branchesPerColor * (strandNum + 1):
+                self.colSwitchIndexes.append(j)
 
             direction = random.randint(0,3)
             #0=up, 1 left, 2=down, 3=right
@@ -81,7 +81,7 @@ class DefaultImage(object):
                 cords[-1][-1][1] > self.height or cords[-1][-1][1] < 0):
                     cords.append([self.makeCords()])
                     branchResetAt = j
-        return cords
+        queue.put(cords)
     def drawImage(self):
         #Draw the image, this will be over-ridden by class for other
         #image modes, so this will only be used for the default theme
@@ -94,15 +94,29 @@ class DefaultImage(object):
         #    self.startPoints.append(self.makeCords())
  
         self.initImg()
-        allCords = []
         self.colsDone = 1
-        for i in range(0,self.strandNum):
-            allCords.append(self.strandWorker(i,int(self.branches/self.strandNum)))
+        #for i in range(0,self.strandNum):
+        #    allCords.append(self.strandWorker(i,int(self.branches/self.strandNum)))
 #            for j in range(0,self.branches):
+        queue = mp.Queue()
+        procs = []
+        for i in range(0,self.strandNum):
+            procs.append(mp.Process(target=self.strandWorker,args=(queue,i,
+                int(self.branches/self.strandNum))))
+            procs[i].start()
+
+        self.allCords = []
+        for i in range(0,self.strandNum):
+            self.allCords.append(queue.get())
+
+        for p in procs:
+            p.join()
+        
         print("Strand workers finished")
-        for k in range(0,len(allCords)):
-            for l in range(0,len(allCords[k])):
-                self.draw.line(allCords[k][l])
+        for k in range(0,len(self.allCords)):
+            for l in range(0,len(self.allCords[k])):
+                self.draw.line(self.allCords[k][l])
+        print(self.colSwitchIndexes)
         del self.draw
         self.exportImg()
         #print(startBox)
