@@ -2,7 +2,7 @@ import time
 from src.helpers.helpers import getArgsBy
 from src.helpers.getConfig import getConfigPart
 from src.mode.default import DefaultImage
-import src.main
+from  src import main
 #This class in itself isn't a theme however implements the same basic
 #functions such as drawImage, which will in this case draw the 
 #image on the parameters provided on the theme for the specified time
@@ -27,14 +27,6 @@ class TimeMode(DefaultImage):
                 #in the config file, so use the corresponding theme
                 self.currentTheme = self.themes[i]
                 #Call main function with all args as string, as if calling
-                #from command line, possibly improve with use of 
-                #**kwargs?
-                if not self.superSampling:
-                    main.main(['Something',self.width,self.height,self.fileName,
-                        "--theme=" + self.currentTheme])
-                elif self.superSampling:
-                    main.main(['Something',self.width,self.height,self.fileName,
-                        '-s','--theme=' + self.currentTheme])
-                else:
-                    raise ValueError("Somehow there's no value for superSampling \
-                            this error should never really be raised but just in case")
+                #from command line, possibly improve with use of kwargs
+                main.runIt(self.width,self.height,self.fileName,
+                        self.currentTheme,self.superSampling)

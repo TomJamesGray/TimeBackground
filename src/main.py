@@ -12,13 +12,11 @@ def main(args):
     parser.add_argument('--theme',default="theme-default",action='store',type=str)
     parser.add_argument('-s',action='store_true')
     results = parser.parse_args(args)
-    width = results.width
-    height = results.height
-    theme = results.theme
-    superSampling = results.s
-    fileName = results.fileName
-    
-    print(superSampling)
+    #Run the theme with the specified parameters
+    runIt(results.width,results.height,results.fileName,
+            results.theme,results.s)
+
+def runIt(width,height,fileName,theme="theme-default",superSampling=False):
     if width <= 0 or height <= 0:
         print('Invalid height or width')
         return 1
@@ -30,7 +28,8 @@ def main(args):
     elif imageMode == "time":
         img = timeMode.TimeMode(width,height,theme,superSampling,fileName)
     img.drawImage()
-    
+
     return 0
+
 def getImageMode(theme):
     return getConfigPart(theme,"mode")
