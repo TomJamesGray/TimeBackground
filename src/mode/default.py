@@ -81,7 +81,7 @@ class DefaultImage(object):
                     #If a new color is needed append the existing section dict to
                     #cords and add the existing one to the cords list
                     cords.append(section)
-                    section = {'cords':[[self.makeCords()]]}
+                    section = {'cords':[[cords[-1]['cords'][-1][-1]]]}
                     curCol = curCol + 1
                     print("Switch at {} to {}".format((strandNum + 1) * j,curCol))
                     section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
