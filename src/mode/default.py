@@ -16,7 +16,6 @@ class DefaultImage(object):
         self.startBox.append(int(width*(1-int(getArgsBy(self.offsets,',')[0])/100)))
         self.startBox.append(int(height*(1-int(getArgsBy(self.offsets,',')[1])/100)))
         
-        self.colSwitchIndexes = []
         
         print("startBox: {}".format(self.startBox))
     
@@ -30,7 +29,17 @@ class DefaultImage(object):
         self.strandNum = int(getConfigPart(self.theme,"strands"))
         self.thickness = int(getConfigPart(self.theme,"thickness"))
         self.maxBranchTurns = int(getConfigPart(self.theme,"maxBranchTurns"))
-        self.branchesPerColor = int(self.branches/len(self.colors))
+
+        #Calculate how many branches are needed per colour
+        self.branchesPerColor = int((self.branches*self.strandNum)/len(self.colors))
+        print("Branches per colour {}".format(self.branchesPerColor))
+
+        #Make list of branch indexes when colour should be switched
+        self.colSwitchIndexes = []
+        for i in range(0,self.branches*self.strandNum):
+            if i % self.branchesPerColor == 0:
+                self.colSwitchIndexes.append(i)
+        
         #Enable superSampling if wanted
         self.superSamplingEnable()
 
@@ -52,15 +61,8 @@ class DefaultImage(object):
     def strandWorker(self,queue,strandNum,branchesForStrand):
         cords = []
         cords.append([self.makeCords()])
-        #if self.colsDone*self.branches/len(self.colors) < j:
-        #    self.color = '#' + self.colors[self.colsDone]
-        #    print("Switching to color {} at branch no {}".format(self.colsDone,j))
-        #    self.colsDone += 1
         branchResetAt = 0
         for j in range(0,branchesForStrand):
-            if (strandNum + 1) * j >= self.branchesPerColor * (strandNum + 1):
-                self.colSwitchIndexes.append(j)
-
             direction = random.randint(0,3)
             #0=up, 1 left, 2=down, 3=right
             if direction == 0:
@@ -102,7 +104,7 @@ class DefaultImage(object):
         procs = []
         for i in range(0,self.strandNum):
             procs.append(mp.Process(target=self.strandWorker,args=(queue,i,
-                int(self.branches/self.strandNum))))
+                self.branches)))
             procs[i].start()
 
         self.allCords = []
@@ -116,7 +118,6 @@ class DefaultImage(object):
         for k in range(0,len(self.allCords)):
             for l in range(0,len(self.allCords[k])):
                 self.draw.line(self.allCords[k][l])
-        print(self.colSwitchIndexes)
         del self.draw
         self.exportImg()
         #print(startBox)
