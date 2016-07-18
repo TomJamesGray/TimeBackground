@@ -76,6 +76,8 @@ class DefaultImage(object):
         curCol = 0
         branchResetAt = 0
         for j in range(0,branchesForStrand):
+            section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
+                colSwitchIndexesForStrand[curCol])]
             if not curCol + 1 >= len(colSwitchIndexesForStrand):
                 if ((strandNum + 1) * (j+1)) >= colSwitchIndexesForStrand[curCol+1]:
                     #If a new color is needed append the existing section dict to
@@ -84,9 +86,6 @@ class DefaultImage(object):
                     section = {'cords':[[cords[-1]['cords'][-1][-1]]]}
                     curCol = curCol + 1
                     print("Switch at {} to {}".format((strandNum + 1) * j,curCol))
-                    section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
-                        colSwitchIndexesForStrand[curCol])]
-                else:
                     section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
                         colSwitchIndexesForStrand[curCol])]
             direction = random.randint(0,3)
