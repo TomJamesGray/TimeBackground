@@ -72,7 +72,6 @@ class DefaultImage(object):
                 self.colorsPerStrand*strandNum:self.colorsPerStrand*(strandNum+1)]
         print("indexes for strand {}".format(colSwitchIndexesForStrand))
         section['cords'].append([self.makeCords()])
-        print(section)
         #The index for the current colour in colSwitchIndexesForStrand
         curCol = 0
         branchResetAt = 0
@@ -87,7 +86,6 @@ class DefaultImage(object):
                     print("Switch at {} to {}".format((strandNum + 1) * j,curCol))
                     section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
                         colSwitchIndexesForStrand[curCol])]
-                    print(section)
                 else:
                     section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
                         colSwitchIndexesForStrand[curCol])]
@@ -112,11 +110,15 @@ class DefaultImage(object):
                     cords.append(section)
                     section = {'cords':[]}
                     section['cords'].append([self.makeCords()])
+                    #Assign a colour to this section now as if it is the last run
+                    #then this section will be returned without a col
+                    section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
+                        colSwitchIndexesForStrand[curCol])]
                     branchResetAt = j
         #Append final section to cords
         cords.append(section)
-        print("Final{}".format(cords))
-        #queue.put(cords)
+        #Return the value of cords to the queue
+        queue.put(cords)
     def drawImage(self):
         #Draw the image, this will be over-ridden by class for other
         #image modes, so this will only be used for the default theme
@@ -148,12 +150,12 @@ class DefaultImage(object):
             p.join()
         
         print("Strand workers finished")
-        print(self.allCords) 
         self.curCol = 0
         for k in range(0,len(self.allCords)):
             for l in range(0,len(self.allCords[k])):
-                self.draw.line(self.allCords[k][l],
-                    '#' + self.colors[self.curCol])
+                for m in range(0,len(self.allCords[k][l]['cords'])):
+                    self.draw.line(self.allCords[k][l]['cords'][m],
+                            self.allCords[k][l]['col'])
         del self.draw
         self.exportImg()
         #print(startBox)
