@@ -154,7 +154,7 @@ class DefaultImage(object):
             for l in range(0,len(self.allCords[k])):
                 for m in range(0,len(self.allCords[k][l]['cords'])):
                     self.draw.line(self.allCords[k][l]['cords'][m],
-                            self.allCords[k][l]['col'])
+                            self.allCords[k][l]['col'],self.thickness)
         del self.draw
         self.exportImg()
         #print(startBox)
