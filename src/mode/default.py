@@ -33,13 +33,13 @@ class DefaultImage(object):
         #Calculate how many branches are needed per colour
         self.branchesPerColor = int((self.branches*self.strandNum)/len(self.colors))
         print("Branches per colour {}".format(self.branchesPerColor))
-
+        self.colorsPerStrand = int((len(self.colors)/self.strandNum))
         #Make list of branch indexes when colour should be switched
         self.colSwitchIndexes = []
         for i in range(0,self.branches*self.strandNum):
             if i % self.branchesPerColor == 0:
                 self.colSwitchIndexes.append(i)
-        
+        print("ColSwitchIndexes: {}".format(self.colSwitchIndexes)) 
         #Enable superSampling if wanted
         self.superSamplingEnable()
 
@@ -58,11 +58,26 @@ class DefaultImage(object):
             self.img = self.img.resize((int(self.width/2),int(self.height/2)),Image.NEAREST)
         self.img.save(self.fileName,"PNG")
 
+    #Returns a list of dictionaries, with dictionaries in the format
+    #This is quite messy, but I can't think of a better way to do it while
+    #still having support for multi-threading
+    #{ 'col':hexColourCode,
+    #   'cords':[[]]
+    #}
     def strandWorker(self,queue,strandNum,branchesForStrand):
         cords = []
+        #Make slice of colSwitchIndexes for this strand
+        colSwitchIndexesForStrand = self.colSwitchIndexes[
+                self.colorsPerStrand*strandNum:self.colorsPerStrand*(strandNum+1)]
+        print("indexes for strand {}".format(colSwitchIndexesForStrand))
         cords.append([self.makeCords()])
+        #The index for the current colour in colSwitchIndexesForStrand
+        curCol = 0
         branchResetAt = 0
         for j in range(0,branchesForStrand):
+            if ((strandNum + 1) * j) >= colSwitchIndexesForStrand[curCol]:
+                curCol = curCol + 1
+                print("Switch at {} to {}".format((strandNum + 1) * j,curCol))
             direction = random.randint(0,3)
             #0=up, 1 left, 2=down, 3=right
             if direction == 0:
@@ -115,9 +130,12 @@ class DefaultImage(object):
             p.join()
         
         print("Strand workers finished")
+        print(self.allCords) 
+        self.curCol = 0
         for k in range(0,len(self.allCords)):
             for l in range(0,len(self.allCords[k])):
-                self.draw.line(self.allCords[k][l])
+                self.draw.line(self.allCords[k][l],
+                    '#' + self.colors[self.curCol])
         del self.draw
         self.exportImg()
         #print(startBox)
