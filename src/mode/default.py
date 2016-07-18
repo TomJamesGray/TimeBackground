@@ -66,40 +66,57 @@ class DefaultImage(object):
     #}
     def strandWorker(self,queue,strandNum,branchesForStrand):
         cords = []
+        section = {'cords':[]}
         #Make slice of colSwitchIndexes for this strand
         colSwitchIndexesForStrand = self.colSwitchIndexes[
                 self.colorsPerStrand*strandNum:self.colorsPerStrand*(strandNum+1)]
         print("indexes for strand {}".format(colSwitchIndexesForStrand))
-        cords.append([self.makeCords()])
+        section['cords'].append([self.makeCords()])
+        print(section)
         #The index for the current colour in colSwitchIndexesForStrand
         curCol = 0
         branchResetAt = 0
         for j in range(0,branchesForStrand):
             if not curCol + 1 >= len(colSwitchIndexesForStrand):
                 if ((strandNum + 1) * (j+1)) >= colSwitchIndexesForStrand[curCol+1]:
+                    #If a new color is needed append the existing section dict to
+                    #cords and add the existing one to the cords list
+                    cords.append(section)
+                    section = {'cords':[[self.makeCords()]]}
                     curCol = curCol + 1
                     print("Switch at {} to {}".format((strandNum + 1) * j,curCol))
+                    section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
+                        colSwitchIndexesForStrand[curCol])]
+                    print(section)
+            else:
+                section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
+                    colSwitchIndexesForStrand[curCol])]
             direction = random.randint(0,3)
             #0=up, 1 left, 2=down, 3=right
             if direction == 0:
-                cords[-1].append((cords[-1][-1][0],cords[-1][-1][1]+self.branchDist))
+                section['cords'][-1].append((section['cords'][-1][-1][0],section['cords'][-1][-1][1]+self.branchDist))
             elif direction == 1:
-                cords[-1].append((cords[-1][-1][0]+self.branchDist,cords[-1][-1][1]))
+                section['cords'][-1].append((section['cords'][-1][-1][0]+self.branchDist,section['cords'][-1][-1][1]))
             elif direction == 2:
-                cords[-1].append((cords[-1][-1][0],cords[-1][-1][1]-self.branchDist))
+                section['cords'][-1].append((section['cords'][-1][-1][0],section['cords'][-1][-1][1]-self.branchDist))
             elif direction == 3:
-                cords[-1].append((cords[-1][-1][0]-self.branchDist,cords[-1][-1][1]))
+                section['cords'][-1].append((section['cords'][-1][-1][0]-self.branchDist,section['cords'][-1][-1][1]))
             
             if j-branchResetAt ==  self.maxBranchTurns:
                 cords.append(self.makeCords())
                 branchResetAt = j
-            #Check if coordinates have gone off the image and if so start a new strand and
-            #abandon the strand which is off the page
-            if (cords[-1][-1][0] > self.width or cords[-1][-1][0] < 0 or
-                cords[-1][-1][1] > self.height or cords[-1][-1][1] < 0):
-                    cords.append([self.makeCords()])
+            #Check if coordinates have gone off the image and if so start a new section dict
+            #and append the existing one to the cords list
+            if (section['cords'][-1][-1][0] > self.width or section['cords'][-1][-1][0] < 0 or
+                section['cords'][-1][-1][1] > self.height or section['cords'][-1][-1][1] < 0):
+                    cords.append(section)
+                    section = {'cords':[]}
+                    section['cords'].append([self.makeCords()])
                     branchResetAt = j
-        queue.put(cords)
+        #Append final section to cords
+        cords.append(section)
+        print("Final{}".format(cords))
+        #queue.put(cords)
     def drawImage(self):
         #Draw the image, this will be over-ridden by class for other
         #image modes, so this will only be used for the default theme
