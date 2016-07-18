@@ -88,9 +88,9 @@ class DefaultImage(object):
                     section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
                         colSwitchIndexesForStrand[curCol])]
                     print(section)
-            else:
-                section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
-                    colSwitchIndexesForStrand[curCol])]
+                else:
+                    section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
+                        colSwitchIndexesForStrand[curCol])]
             direction = random.randint(0,3)
             #0=up, 1 left, 2=down, 3=right
             if direction == 0:
