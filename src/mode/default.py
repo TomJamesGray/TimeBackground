@@ -75,9 +75,10 @@ class DefaultImage(object):
         curCol = 0
         branchResetAt = 0
         for j in range(0,branchesForStrand):
-            if ((strandNum + 1) * j) >= colSwitchIndexesForStrand[curCol]:
-                curCol = curCol + 1
-                print("Switch at {} to {}".format((strandNum + 1) * j,curCol))
+            if not curCol + 1 >= len(colSwitchIndexesForStrand):
+                if ((strandNum + 1) * (j+1)) >= colSwitchIndexesForStrand[curCol+1]:
+                    curCol = curCol + 1
+                    print("Switch at {} to {}".format((strandNum + 1) * j,curCol))
             direction = random.randint(0,3)
             #0=up, 1 left, 2=down, 3=right
             if direction == 0:
