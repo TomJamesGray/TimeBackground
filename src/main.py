@@ -36,6 +36,8 @@ def runIt(width,height,fileName,theme="theme-default",superSampling=False):
         img = triangles.TrianglesImage(width,height,theme,superSampling,fileName)
     elif imageMode == "time":
         img = timeMode.TimeMode(width,height,theme,superSampling,fileName)
+    else:
+        raise ValueError("Unkown image mode {} for theme {}".format(imageMode,theme))
     img.drawImage()
 
     return 0
