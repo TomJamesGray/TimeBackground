@@ -1,5 +1,5 @@
-from src.main import main
+from src.main import runIt
 def testZeroArgs():
-    assert main(['0','0','testImg.png']) == 1 
+    assert runIt(0,0,'testImg.png') == 1 
 def testIntArgs():
-    assert main(['1','1','testImg.png']) == 0
+    assert runIt(1,1,'testImg.png') == 0
