@@ -1,8 +1,11 @@
-import random,re
+import random
+import re
+import logging
 from PIL import Image,ImageDraw
 from src.helpers.helpers import getArgsBy
 from src.helpers.getConfig import getConfigPart
 import multiprocessing as mp
+
 class DefaultImage(object):
     def __init__(self,width,height,theme,superSampling,fileName):
         self.width = width
@@ -100,7 +103,7 @@ class DefaultImage(object):
                 section['cords'][-1].append((section['cords'][-1][-1][0]-self.branchDist,section['cords'][-1][-1][1]))
             
             if j-branchResetAt ==  self.maxBranchTurns:
-                cords.append(self.makeCords())
+                section['cords'][-1].append(self.makeCords())
                 branchResetAt = j
             #Check if coordinates have gone off the image and if so start a new section dict
             #and append the existing one to the cords list
@@ -124,16 +127,9 @@ class DefaultImage(object):
     
         self.retrieveThemeConfig()
  
-        #Generate the start points
-        #self.startPoints = []
-        #for i in range(0,self.strandNum):
-        #    self.startPoints.append(self.makeCords())
- 
         self.initImg()
         self.colsDone = 1
-        #for i in range(0,self.strandNum):
-        #    allCords.append(self.strandWorker(i,int(self.branches/self.strandNum)))
-#            for j in range(0,self.branches):
+        
         queue = mp.Queue()
         procs = []
         for i in range(0,self.strandNum):
@@ -144,11 +140,10 @@ class DefaultImage(object):
         self.allCords = []
         for i in range(0,self.strandNum):
             self.allCords.append(queue.get())
-
-        for p in procs:
-            p.join()
         
-        print("Strand workers finished")
+        logging.info("Strand workers finished")
+        logging.info("Cords: {}".format(self.allCords))
+
         self.curCol = 0
         for k in range(0,len(self.allCords)):
             for l in range(0,len(self.allCords[k])):
@@ -157,8 +152,6 @@ class DefaultImage(object):
                             self.allCords[k][l]['col'],self.thickness)
         del self.draw
         self.exportImg()
-        #print(startBox)
-        #print(sections)
 
     def makeCords(self):
         cords = ()
