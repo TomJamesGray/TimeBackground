@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 import argparse
 import sys
+import logging
 from configparser import NoSectionError
 from src.helpers.getConfig import getConfigPart
 from src.mode import default,triangles,timeMode
 def main(args):
+    logging.basicConfig(level=logging.DEBUG)
+
     parser = argparse.ArgumentParser(description='timeBackground')
     #Define arguments
     parser.add_argument('width',action='store', type=int)
