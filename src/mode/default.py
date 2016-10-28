@@ -53,20 +53,16 @@ class DefaultImage(object):
             self.branchDist *= 2
             self.thickness *= 2
     
-    #Exports the image and check if super sampling is enabled, if so
-    #It will resize the exported image as needed
     def exportImg(self):
+        """
+        Exports the image and check if super sampling is enabled, if so
+        It will resize the exported image as needed
+        """
         if self.superSampling:
             print("Exporting with size adjusted")
             self.img = self.img.resize((int(self.width/2),int(self.height/2)),Image.NEAREST)
         self.img.save(self.fileName,"PNG")
 
-    #Returns a list of dictionaries, with dictionaries in the format
-    #This is quite messy, but I can't think of a better way to do it while
-    #still having support for multi-threading
-    #{ 'col':hexColourCode,
-    #   'cords':[[]]
-    #}
     def strandWorker(self,queue,strandNum,branchesForStrand):
         cords = []
         section = {'cords':[]}
@@ -125,8 +121,10 @@ class DefaultImage(object):
         #Return the value of cords to the queue
         queue.put(cords)
     def drawImage(self):
-        #Draw the image, this will be over-ridden by class for other
-        #image modes, so this will only be used for the default theme
+        """
+        Draw the image, this will be over-ridden by class for other
+        image modes, so this will only be used for the default theme
+        """
     
         self.retrieveThemeConfig()
  
@@ -161,7 +159,9 @@ class DefaultImage(object):
         cords = cords + (random.randint(0,self.startBox[1])+int((self.height-self.startBox[1])/2),)
         return cords
     def initImg(self):
-        #Make a blank image
+        """
+        Makes blank image with correct dimensions and background colour
+        """
         self.img = Image.new('RGBA',(self.width,self.height),color='#' + getConfigPart(self.theme,"bg"))
         self.draw = ImageDraw.Draw(self.img)
 
