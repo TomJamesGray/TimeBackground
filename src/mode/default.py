@@ -103,7 +103,10 @@ class DefaultImage(object):
                 section['cords'][-1].append((section['cords'][-1][-1][0]-self.branchDist,section['cords'][-1][-1][1]))
             
             if j-branchResetAt ==  self.maxBranchTurns:
-                section['cords'][-1].append(self.makeCords())
+                cords.append(section)
+                section = {'cords':[[self.makeCords()]]}
+                section['col'] = '#' + self.colors[self.colSwitchIndexes.index(
+                    colSwitchIndexesForStrand[curCol])]
                 branchResetAt = j
             #Check if coordinates have gone off the image and if so start a new section dict
             #and append the existing one to the cords list
@@ -142,7 +145,6 @@ class DefaultImage(object):
             self.allCords.append(queue.get())
         
         logging.info("Strand workers finished")
-        logging.info("Cords: {}".format(self.allCords))
 
         self.curCol = 0
         for k in range(0,len(self.allCords)):
