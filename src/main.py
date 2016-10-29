@@ -4,7 +4,7 @@ import sys
 import logging
 from configparser import NoSectionError
 from src.helpers.getConfig import getConfigPart
-from src.mode import default,triangles,timeMode
+from src.mode import default,triangles,timeMode,curve
 def main(args):
     logging.basicConfig(level=logging.DEBUG)
 
@@ -39,6 +39,8 @@ def runIt(width,height,fileName,theme="theme-default",superSampling=False):
         img = triangles.TrianglesImage(width,height,theme,superSampling,fileName)
     elif imageMode == "time":
         img = timeMode.TimeMode(width,height,theme,superSampling,fileName)
+    elif imageMode == "curve":
+        img = curve.CurveImage(width,height,theme,superSampling,fileName)
     else:
         raise ValueError("Unkown image mode {} for theme {}".format(imageMode,theme))
     img.drawImage()
